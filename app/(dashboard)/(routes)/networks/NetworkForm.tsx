@@ -43,7 +43,7 @@ export default function NetworkForm() {
   const [loading, setLoading] = useState(false);
 
   const handleSubmitForm = async (data: Network ) => {
-  const response = await fetch("http://localhost:3000/api/networks", {
+  const response = await fetch("api/networks", {
   method: "POST",
   body: JSON.stringify(data),
   headers: {
