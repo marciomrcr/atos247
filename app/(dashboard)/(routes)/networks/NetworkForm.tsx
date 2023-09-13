@@ -7,6 +7,7 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 
+import { Save, XOctagon } from "lucide-react";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -16,7 +17,7 @@ export const metadata: Metadata = {
 };
 
 const formSchema = z.object({
-  name: z.string().nonempty('O nome não pode ficar em branco!')
+  name: z.string().trim().nonempty('O nome não pode ficar em branco!')
   .min(3, "O Nome deverá ter pelo menos 3 letras."),
 });
 
@@ -43,9 +44,11 @@ export default function NetworkForm() {
   const [loading, setLoading] = useState(false);
 
   const handleSubmitForm = async (data: Network ) => {
+    // Transforme a primeira letra da primeira palavra em maiúscula
+    const formattedName = data.name.replace(/^\w/, (c) => c.toUpperCase());
   const response = await fetch("api/networks", {
   method: "POST",
-  body: JSON.stringify(data),
+  body: JSON.stringify({ ...data, name: formattedName }),
   headers: {
     "Content-Type": "application/json"
   }
@@ -58,9 +61,11 @@ if (!response.ok) {
 toast.success("Rede cadastrada com sucesso!", {
   position: toast.POSITION.TOP_CENTER,
 });
-setLoading(false);
+
 refresh()
-handleModal()  } 
+handleModal() 
+setLoading(true);
+ } 
 
   return (
     <div>
@@ -82,8 +87,12 @@ handleModal()  }
       {...register('name')} />         
     {errors.name && (<p className="text-black">{errors.name.message}</p>)}  </div> 
        <div className="modal-action">
-        <button type="button" onClick={handleModal} className="btn bg-red-500 mb-3 ">Cancelar</button>
-        <button type="submit" className="btn btn-primary">Salvar</button></div>
+        <button type="button" onClick={handleModal} className="btn bg-red-500 mb-3 "><span className="px-2 text-blue-600">
+                  <XOctagon className="text-red-500-500 cursor-pointer" />
+                </span>Cancelar</button>
+        <button type="submit" className="btn btn-primary"><span className="px-2 text-blue-600">
+                  <Save className="text-blue-500 cursor-pointer" />
+                </span>Salvar</button></div>
       </form>
         </div>
       </div>

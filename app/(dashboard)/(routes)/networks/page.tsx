@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 
 import { getNetworks } from "@/actions/getNetworks";
+import { AlertCircleIcon } from "lucide-react";
 import NetworkForm from "./NetworkForm";
 import NetworkUpdate from "./NetworkUpdate";
 import NetworkDelete from "./NetworksDelete";
@@ -18,16 +19,17 @@ async function NetworkPage() {
   return (
     <div>
      
-      <div className="mx-4">
+      <div className=" mb-4">
         <NetworkForm />
         {/* <CellForm networks={networks}/> */}
       </div>
     
       <div>
         {networks.length === 0 ? (
-          "Nenhum dado Cadastrado"
+          <div className="flex items-center justify-center space-x-2 mt-6" ><AlertCircleIcon/> 
+          <p className='text-red-600 text-xl text-center'>Nenhuma rede cadastrada. Cadastre a primeira rede 👨‍👩‍👧‍👦 </p></div>
         ) : (
-          <table className="table w-full">
+          <table className="table w-full bg-slate-100">
             <thead>
               <tr>
                 <th className=" ">#</th>
@@ -63,6 +65,7 @@ async function NetworkPage() {
                     <td className="flex justify-center space-x-1">  
                       <NetworkDelete id={network.id} />
                       <NetworkUpdate network={network} /> 
+                     
                     </td>
                   </tr>
                   

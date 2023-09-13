@@ -41,10 +41,19 @@ const router = useRouter()
         <div className='modal-box'>
           <h3 className="mb-2 text-lg text-center font-bold text-red-500">Deseja realmente excluir a rede {name}?</h3>     
     
-      <div className='modal-action space-x-4'>   
-          < XOctagon  onClick={handleModal} className="cursor-pointer" />          
-          <Trash2 onClick={()=>handleDelete(id)} className="cursor-pointer text-red-600"         
-          />
+      <div className='modal-action'>   
+      <div onClick={handleModal} className="cursor-pointer flex items-center">
+                <XOctagon className="text-red-600" />
+                <span className="text-red-600 px-2">Cancelar</span>
+              </div>
+
+              <div onClick={()=>handleDelete(id)}  className="cursor-pointer flex items-center">
+              <Trash2           
+          /><span className="text-red-600 px-2">Excluir</span>
+              </div>
+
+
+          
           
         </div>
       </div>

@@ -24,35 +24,28 @@ import {
   Network,
   PersonStanding,
   User,
-  UserPlus,
-  Users,
+  UserPlus
 } from "lucide-react";
 import { useRouter } from "next/navigation";
 
 const tolls = [
   {
-    label: "Cadastrar Discípulo",
+    label: "Discípulo",
     href: "/members",
     icon: UserPlus,
     color: "text-violet-500",
     bgColor: "text-violet-500/10",
   },
+  
   {
-    label: "Cadastrar Célula",
-    href: "/cells",
-    icon: Users,
-    color: "text-violet-500",
-    bgColor: "text-violet-500/10",
-  },
-  {
-    label: "Cadastrar Rede",
+    label: "Rede",
     href: "/networks",
     icon: Network,
     color: "text-violet-500",
     bgColor: "text-violet-500/10",
   },
   {
-    label: "Cadastrar Usuário",
+    label: "Usuário",
     href: "/users",
     icon: User,
     color: "text-violet-500",
@@ -74,19 +67,19 @@ const CellPage = () => {
   return (
     <div className=" items-center">
       <div className="mb-8 space-y-4">
-        <h2 className="text-2xl md:text-4xl font-bold text-center">
+        <h2 className="text-2xl font-bold text-center">
           Dashboard - Células
         </h2>
         <p className="text-muted-foreground font-light text-sm md:text-lg text-center">
           Visão geral de sua gestão de células
         </p>
       </div>
-      <div className="px-4 md:px-20 lg:px-32 space-y-4">
+      <div className="px-4 md:px-20 lg:px-32 space-y-4 ">
         {tolls.map((tool) => (
           <Card
             key={tool.href}
             onClick={() => router.push(tool.href)}
-            className="p-4 border-black/5 flex items-center justify-between hover:shadow-md transition cursor-pointer"
+            className="p-4 border-black/5 flex  items-center justify-between hover:shadow-md transition cursor-pointer"
           >
             <div className="flex items-center gap-x-4">
               <div className={cn("p-2 w-fit rounded-md", tool.bgColor)}>
@@ -98,14 +91,14 @@ const CellPage = () => {
           </Card>
         ))}
       </div>
-      <div>
+      <div className="px-4 md:px-20 lg:px-32 space-y-4 ">
         <TableForm />
       </div>
-      <div>
+      <div className="px-4 md:px-20 lg:px-32 space-y-4">
         {forms.map((form) => (
           <Card
             key={form.label}
-            className="p-4 border-black/5 hover:shadow-md transition w-[320px] md:w-[480px] mx-4 my-4"
+            className=" border-black/5 hover:shadow-md transition my-4"
           >
             <CardHeader>
               <CardTitle>{form.label}</CardTitle>
