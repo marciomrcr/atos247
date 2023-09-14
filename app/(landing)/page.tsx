@@ -3,7 +3,6 @@ import { Cross } from 'lucide-react';
 import Link from "next/link";
 
 import { Metadata } from "next";
-import Image from "next/image";
 
 import { CalendarDateRangePicker } from "@/components/ui/date-range-picker";
 import { MainNav } from "@/components/ui/main-nav";
@@ -33,27 +32,10 @@ export const metadata: Metadata = {
 
 const LandingPage = () => {
   return (
-    <div className="bg-[#111827]">
-      
-      <div>
-        
-        <div className="md:hidden">
-        <Image
-          src="/dashboard-light.png"
-          width={1280}
-          height={866}
-          alt="Dashboard"
-          className="block dark:hidden"
-        />
-        <Image
-          src="/dashboard-dark.png"
-          width={1280}
-          height={866}
-          alt="Dashboard"
-          className="hidden dark:block"
-        />
-      </div>
-      <div className="hidden flex-col md:flex">
+    <div className="bg-[#111827]">      
+           
+  
+      <div className="flex-col md:flex">
         <div className="border-b">
           <div className="flex h-16 items-center px-4">
             <TeamSwitcher />
@@ -220,7 +202,6 @@ const LandingPage = () => {
 
 
 
-    </div>
   );
 };
 
