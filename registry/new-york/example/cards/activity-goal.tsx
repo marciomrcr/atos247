@@ -1,8 +1,8 @@
 "use client"
 
-import * as React from "react"
 import { MinusIcon, PlusIcon } from "@radix-ui/react-icons"
 import { useTheme } from "next-themes"
+import * as React from "react"
 import { Bar, BarChart, ResponsiveContainer } from "recharts"
 
 import { useConfig } from "@/hooks/use-config"
