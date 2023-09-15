@@ -2,10 +2,15 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import axios from 'axios';
 import { Edit, Save, XOctagon } from 'lucide-react';
+import { Metadata } from 'next';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { z } from 'zod';
+
+export const metadata: Metadata = {
+  title: "Redes de Células - Atos 2.47",
+};
 
 const formSchema = z.object({
 

@@ -1,186 +1,67 @@
-"use client";
-import { TableForm } from "@/components/TableForm";
-import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { cn } from "@/lib/utils";
-import {
-  Network,
-  PersonStanding,
-  UserPlus,
-  Users
-} from "lucide-react";
-import { useRouter } from "next/navigation";
 
-const tolls = [
-  {
-    label: "Célula",
-    href: "/users",
-    icon: Users,
-    color: "text-violet-500",
-    bgColor: "text-violet-500/10",
-  },
-  {
-    label: "Discípulo",
-    href: "/members",
-    icon: UserPlus,
-    color: "text-violet-500",
-    bgColor: "text-violet-500/10",
-  },
-  
-  {
-    label: "Rede",
-    href: "/networks",
-    icon: Network,
-    color: "text-violet-500",
-    bgColor: "text-violet-500/10",
-  },
-  
-];
+import type { Metadata } from "next";
+import Link from "next/link";
 
-const forms = [
-  {
-    label: "Nova Célula",
-    icon: PersonStanding,
-    color: "text-violet-500",
-    bgColor: "text-violet-500/10",
-  },
-];
+import { getCells } from "@/actions/getCells";
+import { getNetworks } from "@/actions/getNetworks";
+import { AlertCircleIcon } from "lucide-react";
 
-const CellPage = () => {
-  const router = useRouter();
+import CellForm from "./CellForm";
+import DeleteCellForm from "./DeleteCellForm";
+import UpdateCellForm from "./UpdateCellForm";
+
+export const metadata: Metadata = {
+  title: "Células - Atos 2.47",
+};
+
+async function CellPage() {
+  const [networks, cells] = await Promise.all( [getNetworks(), getCells()])
+
+
   return (
-    <div className=" items-center">
-      <div className="mb-8 space-y-4">
-        <h2 className="text-2xl font-bold text-center">
-          Dashboard - Células
-        </h2>
-        <p className="text-muted-foreground font-light text-sm md:text-lg text-center">
-          Visão geral de sua gestão de células
-        </p>
+    <div>     
+      <div className=" mb-4">
+
+        <CellForm networks={networks} />
       </div>
-
-     {/* #### Cards - init ### */}
-
-
-   {/* #### Cards - end ### */}
-   <div className="px-4 md:px-20 lg:px-32 space-y-4">
-        {tolls.map((tool) => (
-          
-          <Card
-            key={tool.href}
-            onClick={() => router.push(tool.href)}
-            className="p-4 border-black/5 flex items-center justify-between hover:shadow-md transition cursor-pointer"
-          >
-            <div className="flex items-center gap-x-4">
-            <tool.icon className={cn("w-8 h-8", tool.color)} />
-              {/* <div className={cn("p-2 w-fit rounded-md", tool.bgColor)}>
-                <tool.icon className={cn("w-8 h-8", tool.color)} />
-              </div> */}
-              <div className="font-semibold">{tool.label}</div>
-            </div>
-            
-          </Card>
-        ))}
-      </div>
-
-
-      <div className="px-4 md:px-20 lg:px-32 space-y-4 ">
-        <TableForm />
-      </div>
-      <div className="px-4 md:px-20 lg:px-32 space-y-4">
-        {forms.map((form) => (
-          <Card
-            key={form.label}
-            className=" border-black/5 hover:shadow-md transition my-4"
-          >
-            <CardHeader>
-              <CardTitle>{form.label}</CardTitle>
-              <CardDescription>
-                Escolha o nome, a rede, os membros e o líder da célula.
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <form>
-                <div className="grid w-full items-center gap-4">
-                  <div className="flex flex-col space-y-1.5">
-                    <Label htmlFor="name">Nome</Label>
-                    <Input id="name" placeholder="Nome da célula" />
-                  </div>
-                  <div className="flex flex-col space-y-1.5">
-                    <Label htmlFor="framework">Rede</Label>
-                    <Select>
-                      <SelectTrigger id="framework">
-                        <SelectValue placeholder="Selecione a rede" />
-                      </SelectTrigger>
-                      <SelectContent position="popper">
-                        <SelectItem value="next">IDE</SelectItem>
-                        <SelectItem value="sveltekit">IDE Jovens</SelectItem>
-                        <SelectItem value="next">Rede da Família</SelectItem>
-                        <SelectItem value="next">Shara</SelectItem>
-                        <SelectItem value="astro">Sou de Jesus </SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
-                  <div className="flex flex-col space-y-1.5">
-                    <Label htmlFor="framework">Membros</Label>
-                    <Select>
-                      <SelectTrigger id="framework">
-                        <SelectValue placeholder="Selecione os membros" />
-                      </SelectTrigger>
-                      <SelectContent position="popper">
-                        <SelectItem value="next">
-                          Ana Carla Rodrigues da Silva
-                        </SelectItem>
-                        <SelectItem value="sveltekit">Membro2</SelectItem>
-                        <SelectItem value="next">Membro3</SelectItem>
-                        <SelectItem value="next">Membro4</SelectItem>
-                        <SelectItem value="astro">Membro5</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
-                  <div className="flex flex-col space-y-1.5">
-                    <Label htmlFor="framework">Líder</Label>
-                    <Select>
-                      <SelectTrigger id="framework">
-                        <SelectValue placeholder="Selecione o líder" />
-                      </SelectTrigger>
-                      <SelectContent position="popper">
-                        <SelectItem value="next">Membro1</SelectItem>
-                        <SelectItem value="sveltekit">Membro2</SelectItem>
-                        <SelectItem value="next">Membro3</SelectItem>
-                        <SelectItem value="next">Membro4</SelectItem>
-                        <SelectItem value="astro">Membro5</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
-                </div>
-              </form>
-            </CardContent>
-            <CardFooter className="flex justify-between">
-              <Button variant="outline">Cancelar</Button>
-              <Button>Salvar</Button>
-            </CardFooter>
-          </Card>
-        ))}
+    
+      <div>
+        {cells.length === 0 ? (
+          <div className="flex items-center justify-center space-x-2 mt-6" ><AlertCircleIcon/> 
+          <p className='text-red-600 text-xl text-center'>Nenhuma célula cadastrada. Cadastre a primeira célula 👨‍👩‍👧‍👦 </p></div>
+        ) : (
+          <table className="table w-full">
+                 <thead>
+                   <tr>
+                     <th className=' '>#</th>
+                     <th>Célula</th>
+                     <th>Rede</th>
+                     <th>Membros</th>
+                     <th className="text-center">Ações</th>
+                   </tr>
+                 </thead>
+                 <tbody>
+                   {cells?.map((cell, index) => (
+                      <tr key={cell.id}>
+                        <td className=' '>{index + 1}</td>
+                        <td className='w-1/3'>{cell.name}</td>                    
+                        <td className='w-1/3'>{cell.Network.name}</td> 
+                        <td className='w-1/3'>
+                        <Link href={"/cells/" + cell.id} className='cursor-pointer hover:text-blue-500 hover:font-semibold underline'>
+                          {cell._count.member} Membros</Link></td>
+                        <td className='flex justify-center space-x-1'><DeleteCellForm id={cell.id}/>
+                          <UpdateCellForm cell={cell}  networks={networks}/> 
+                        </td>
+        
+                      </tr>
+                    ))}
+        
+                  </tbody>
+                </table>
+        )}
       </div>
     </div>
   );
-};
+}
 
 export default CellPage;
