@@ -65,6 +65,7 @@ async function NetworkPage() {
                     <td className="flex justify-center space-x-1">  
                       <NetworkDelete id={network.id} />
                       <NetworkUpdate network={network} /> 
+                      {/* <NetworkView network={network} /> */}
                      
                     </td>
                   </tr>

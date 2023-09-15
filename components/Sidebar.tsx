@@ -40,10 +40,12 @@ const routes = [
   {
     label: "Usuários",
     icon: User,
-    href: "/members",
+    href: "/users",
     color: "text-sky-500",
   },
 ];
+
+
 
 const Sidebar = () => {
   const pathname = usePathname();
