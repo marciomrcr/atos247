@@ -40,21 +40,21 @@ const LandingPage = () => {
               {/* <Search /> */}
               {/* <UserNav /> */}
               <Link href="/dashboard">
-          <button className="text-gray-100 mr-6 bg-cyan-950 rounded-md px-4 py-1 border border-gray-300">Login</button>
+          <button className="text-gray-100 mr-6 bg-cyan-950 text-sm  md:text-base rounded-md md:px-4 px-2 py-1 border border-gray-300">Login</button>
         </Link>
             </div>
           </div>
         </div>
         <div className="flex-1 space-y-4 p-8 pt-6">
           <div className="flex items-center justify-between ">
-            <h2 className="text-xl md:text-3xl font-bold tracking-tight text-gray-100">Overview</h2>
+            <h2 className="text-base md:text-3xl font-bold tracking-tight text-gray-100">Overview</h2>
             <div className="flex items-center space-x-2">
-              <CalendarDateRangePicker />
+              <CalendarDateRangePicker className=''/>
               
             </div>
           </div>
-          <Tabs defaultValue="overview" className="space-y-4">
-            <TabsList>
+          <Tabs defaultValue="overview"  className="space-y-4">
+            <TabsList className="hidden md:flex">
               <TabsTrigger className='text-sm md:text-base px-[10px] md:px-auto' value="overview">Overview</TabsTrigger>
               <TabsTrigger className='text-sm md:text-base px-[10px] md:px-auto' value="analytics" disabled>
                 Batismos

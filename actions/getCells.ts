@@ -14,6 +14,7 @@ export const getCells = async () => {
       },
       member: {
         select: {
+          id: true,
           name: true,
         },
         orderBy: {

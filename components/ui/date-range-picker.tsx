@@ -23,7 +23,7 @@ export function CalendarDateRangePicker({
   })
 
   return (
-    <div className={cn("grid gap-2 bg-slate-300", className='rounded-md')}>
+    <div className={cn(" gap-1 bg-slate-300 px-0 hidden md:grid", className='rounded-md')}>
       <Popover>
         <PopoverTrigger asChild>
           <Button
@@ -37,15 +37,15 @@ export function CalendarDateRangePicker({
             <CalendarIcon className="mr-2 h-4 w-4" />
             {date?.from ? (
               date.to ? (
-                <>
-                  {format(date.from, "LLL dd, y")} -{" "}
-                  {format(date.to, "LLL dd, y")}
-                </>
+                <div className="text-sm">
+                  {format(date.from, "dd LLL, y")} -{" "}
+                  {format(date.to, "dd LLL, y")}
+                </div>
               ) : (
-                format(date.from, "LLL dd, y")
+                format(date.from, "dd LLL, y")
               )
             ) : (
-              <span>Pick a date</span>
+              <span>Escolha uma data</span>
             )}
           </Button>
         </PopoverTrigger>

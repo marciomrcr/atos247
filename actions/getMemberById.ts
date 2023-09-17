@@ -1,7 +1,10 @@
 import { prisma } from "@/libs/prisma";
 
-export const getMembersCell = async () => {
-  const res = await prisma.member.findMany({
+export const getMemberById = async (id: string) => {
+  const res = await prisma.member.findUnique({
+    where: {
+      id
+    },
     select: {
       id: true,
       name: true,
@@ -10,16 +13,18 @@ export const getMembersCell = async () => {
       Cell: {
         select: {
           name: true,
+          id: true,
           Network: {
             select: {
               name: true,
+              id: true,
             },
           },
         },
       },
     },
 
-    orderBy: { name: "asc" },
+    
   });
   return res;
 };

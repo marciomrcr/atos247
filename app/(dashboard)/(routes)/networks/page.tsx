@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 
 import { getNetworks } from "@/actions/getNetworks";
-import { AlertCircleIcon } from "lucide-react";
+import { AlertCircleIcon, View } from "lucide-react";
+import Link from "next/link";
 import NetworkForm from "./NetworkForm";
 import NetworkUpdate from "./NetworkUpdate";
 import NetworkDelete from "./NetworksDelete";
@@ -32,7 +32,7 @@ async function NetworkPage() {
           <table className="table w-full bg-slate-100">
             <thead>
               <tr>
-                <th className=" ">#</th>
+                <th className="hidden md:flex">#</th>
                 <th>Nome</th>
                 <th>Células</th>
                 <th>Membros</th>
@@ -50,16 +50,12 @@ async function NetworkPage() {
 
                 return (
                   <tr key={network.id}>
-                    <td className=" ">{index + 1}</td>
+                    <td className="hidden md:flex">{index + 1}</td>
                     <td className="w-1/3">{network.name}</td>
-                    <td className="w-1/3">
-                      {" "}
-                      <Link
-                        href={"/networks/" + network.id}
-                        className="cursor-pointer hover:text-blue-500 hover:font-semibold underline"
-                      >
-                        {network._count.cell} célula(s)
-                      </Link>
+                    <td className="w-1/3 flex items-center gap-1">  
+                    <Link href={"/networks/" + network.id} className='cursor-pointer hover:text-blue-500 hover:font-semibold underline flex items-center justify-center gap-1'>
+                    {network._count.cell} <View/> </Link>                   
+                                         
                     </td>
                     <td className="w-1/3">{totalMembers}</td>
                     <td className="flex justify-center space-x-1">  

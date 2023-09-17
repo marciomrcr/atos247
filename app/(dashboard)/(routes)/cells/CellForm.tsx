@@ -18,18 +18,29 @@ export const metadata: Metadata = {
 const networkSchema = z.object({
   id: z.string(),
   name: z
-    .string()
-    .trim()
-    .nonempty('O nome não pode ficar em branco!')
-    .min(3, "O Nome deverá ter pelo menos 3 letras."),
+  .string()    
+  .nonempty('O nome não pode ficar em branco!')
+  .min(3, "O Nome deverá ter pelo menos 3 letras.")
+  .trim()
+  .transform(name =>{
+    return name.trim().split('').map(word =>{
+      return word[0].toLocaleUpperCase().concat(word.substring(1))
+    }).join('')
+  }),
 });
 
 const formSchema = z.object({
   name: z
-    .string()
-    .trim()
-    .nonempty('O nome não pode ficar em branco!')
-    .min(3, "O Nome deverá ter pelo menos 3 letras."),
+  .string()    
+  .nonempty('O nome não pode ficar em branco!')
+  .min(3, "O Nome deverá ter pelo menos 3 letras.")
+  .trim()
+  .transform(name =>{
+    return name.trim().split(' ').map(word =>{
+      return word[0].toLocaleUpperCase().concat(word.substring(1))
+    }).join(' ')
+  }),
+    
   networkId: z.string().nonempty('Escolha uma rede!'),
 });
 
@@ -62,14 +73,13 @@ export default function CellForm({ networks }: { networks: Network[] }) {
   };
 
   const handleSubmitForm = async (data: Cell) => {
-    // Transforme a primeira letra da primeira palavra em maiúscula
-    const formattedName = data.name.replace(/^\w/, (c) => c.toUpperCase());
+   
     setLoading(true);
 
     try {
       const response = await fetch("api/cells", {
         method: "POST",
-        body: JSON.stringify({ ...data, name: formattedName }),
+        body: JSON.stringify({ ...data }),
         headers: {
           "Content-Type": "application/json",
         },

@@ -9,6 +9,7 @@ import { getMembers } from "@/actions/getMembers";
 import DeleteMemberForm from "./DeleteMemberForm";
 import MemberForm from "./MemberForm";
 import UpdateMemberForm from "./UpdateMemberForm";
+import View from './View';
 
 export const metadata: Metadata = {
   title: "Membros - Atos 2.47",
@@ -23,6 +24,7 @@ async function MemberPage() {
       <div className=" mb-4">
 
         <MemberForm cells={cells} /> 
+       
       </div>
     
       <div>
@@ -54,6 +56,7 @@ async function MemberPage() {
                         <td className='w-1/3'>{member.email}</td>
                         <td className='flex justify-center space-x-1'><DeleteMemberForm id={member.id} name={member.name} cellId={member.cellId}/>
                           <UpdateMemberForm cells={cells}  member={member}/> 
+                          <View cells={cells}  member={member}/>
                         </td>
         
                       </tr>

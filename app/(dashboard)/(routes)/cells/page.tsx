@@ -6,7 +6,9 @@ import { getCells } from "@/actions/getCells";
 import { getNetworks } from "@/actions/getNetworks";
 import { AlertCircleIcon } from "lucide-react";
 
+import { getMembers } from "@/actions/getMembers";
 import CellForm from "./CellForm";
+import CellMemberForm from "./CellMemberForm";
 import DeleteCellForm from "./DeleteCellForm";
 import UpdateCellForm from "./UpdateCellForm";
 
@@ -15,7 +17,7 @@ export const metadata: Metadata = {
 };
 
 async function CellPage() {
-  const [networks, cells] = await Promise.all( [getNetworks(), getCells()])
+  const [members, networks, cells] = await Promise.all( [getMembers(), getNetworks(), getCells()])
 
 
   return (
@@ -23,6 +25,7 @@ async function CellPage() {
       <div className=" mb-4">
 
         <CellForm networks={networks} />
+        <CellMemberForm members={members} networks={networks}/> 
       </div>
     
       <div>

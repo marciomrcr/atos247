@@ -17,8 +17,16 @@ export const metadata: Metadata = {
 };
 
 const formSchema = z.object({
-  name: z.string().trim().nonempty('O nome não pode ficar em branco!')
-  .min(3, "O Nome deverá ter pelo menos 3 letras."),
+  name: z
+  .string()    
+  .nonempty('O nome não pode ficar em branco!')
+  .min(3, "O Nome deverá ter pelo menos 3 letras.")
+  .trim()
+  .transform(name =>{
+    return name.trim().split(' ').map(word =>{
+      return word[0].toLocaleUpperCase().concat(word.substring(1))
+    }).join(' ')
+  }),
 });
 
 type Network = z.infer<typeof formSchema>;
@@ -44,11 +52,10 @@ export default function NetworkForm() {
   const [loading, setLoading] = useState(false);
 
   const handleSubmitForm = async (data: Network ) => {
-    // Transforme a primeira letra da primeira palavra em maiúscula
-    const formattedName = data.name.replace(/^\w/, (c) => c.toUpperCase());
+   
   const response = await fetch("api/networks", {
   method: "POST",
-  body: JSON.stringify({ ...data, name: formattedName }),
+  body: JSON.stringify({ ...data}),
   headers: {
     "Content-Type": "application/json"
   }

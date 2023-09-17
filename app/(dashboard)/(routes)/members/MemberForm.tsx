@@ -26,10 +26,15 @@ const cellSchema = z.object({
 
 const formSchema = z.object({
   name: z
-    .string()
-    .trim()
-    .nonempty('O nome não pode ficar em branco!')
-    .min(3, "O Nome deverá ter pelo menos 3 letras."),
+  .string()    
+  .nonempty('O nome não pode ficar em branco!')
+  .min(3, "O Nome deverá ter pelo menos 3 letras.")
+  .trim()
+  .transform(name =>{
+    return name.trim().split(' ').map(word =>{
+      return word[0].toLocaleUpperCase().concat(word.substring(1))
+    }).join(' ')
+  }),
     email: z
     .string()
     .trim()
@@ -74,13 +79,13 @@ export default function MemberForm({ cells }: { cells: Cell[] }) {
 
   const handleSubmitForm = async (data: Member) => {
     // Transforme a primeira letra da primeira palavra em maiúscula
-    const formattedName = data.name.replace(/^\w/, (c) => c.toUpperCase());
+    // const formattedName = data.name.replace(/^\w/, (c) => c.toUpperCase());
     setLoading(true);
 
     try {
       const response = await fetch("api/members", {
         method: "POST",
-        body: JSON.stringify({ ...data, name: formattedName }),
+        body: JSON.stringify({ ...data }),
         headers: {
           "Content-Type": "application/json",
         },
@@ -127,7 +132,7 @@ export default function MemberForm({ cells }: { cells: Cell[] }) {
                 className={`mb-3 w-full input input-bordered ${
                   errors.name ? "input-error" : ""
                 }`}
-                {...register("name", { required: true })}
+                {...register("name")}
               />
               {errors.name && (
                 <p className="text-red-500">{errors.name.message}</p>
@@ -142,7 +147,7 @@ export default function MemberForm({ cells }: { cells: Cell[] }) {
                 className={`mb-3 w-full input input-bordered ${
                   errors.email ? "input-error" : ""
                 }`}
-                {...register("email", { required: true })}
+                {...register("email")}
               />
               {errors.email && (
                 <p className="text-red-500">{errors.email.message}</p>
