@@ -3,13 +3,13 @@ import type { Metadata } from "next";
 import Link from "next/link";
 
 import { getCells } from "@/actions/getCells";
-import { AlertCircleIcon } from "lucide-react";
+import { AlertCircleIcon, View } from "lucide-react";
 
 import { getMembers } from "@/actions/getMembers";
 import DeleteMemberForm from "./DeleteMemberForm";
 import MemberForm from "./MemberForm";
 import UpdateMemberForm from "./UpdateMemberForm";
-import View from './View';
+
 
 export const metadata: Metadata = {
   title: "Membros - Atos 2.47",
@@ -20,11 +20,9 @@ async function MemberPage() {
 
 
   return (
-    <div>     
+    <div className="mt-3">  
       <div className=" mb-4">
-
         <MemberForm cells={cells} /> 
-       
       </div>
     
       <div>
@@ -56,7 +54,10 @@ async function MemberPage() {
                         <td className='w-1/3'>{member.email}</td>
                         <td className='flex justify-center space-x-1'><DeleteMemberForm id={member.id} name={member.name} cellId={member.cellId}/>
                           <UpdateMemberForm cells={cells}  member={member}/> 
-                          <View cells={cells}  member={member}/>
+                          <Link href={"/members/" + member.id} className='cursor-pointer hover:text-blue-500 hover:font-semibold underline flex items-center gap-1'>
+                    <View /></Link>
+
+                          
                         </td>
         
                       </tr>

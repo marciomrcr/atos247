@@ -17,9 +17,12 @@ async function NetworkPage() {
   //const members = await countMembers();
 
   return (
-    <div>
+    <div className="mt-3">
      
-      <div className=" mb-4">
+      <div className="flex items-center mb-4">
+      <h1 className=" mx-4 font-bold text-2xl">
+          Redes de Células Cadastradas
+        </h1>
         <NetworkForm />
         {/* <CellForm networks={networks}/> */}
       </div>

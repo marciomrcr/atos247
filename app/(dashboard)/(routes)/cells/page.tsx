@@ -21,7 +21,7 @@ async function CellPage() {
 
 
   return (
-    <div>     
+    <div className="mt-3">   
       <div className=" mb-4">
 
         <CellForm networks={networks} />

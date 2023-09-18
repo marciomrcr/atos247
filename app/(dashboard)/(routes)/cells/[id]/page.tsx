@@ -87,7 +87,7 @@ export default async function CellPage({
   return (
     <div>
 <div className="">  
-        <h1 className="flex items-end mx-4 font-bold text-2xl">Célula {cell.name}<span className="mx-2 font-normal text-base">- Rede {cell.Network.name}</span></h1>
+        <h1 className="flex items-end mx-4 font-bold text-2xl">Célula {cell.name}<span className="mx-2 font-normal text-base"> - Rede {cell.Network.name}</span></h1>
 </div>
       <div>
         {!cell ? (
