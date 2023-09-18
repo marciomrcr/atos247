@@ -68,7 +68,7 @@ interface CellForme {
   networks: Network[]
 }
 
-export default function CellForm({ networks, members }:CellForme ) {
+export default function CellMemberForm({ networks, members }:CellForme ) {
   const {
     handleSubmit,
     register,

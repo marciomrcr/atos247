@@ -76,7 +76,7 @@ setLoading(true);
 
   return (
     <div>
-      <button className="btn" onClick={handleModal}>
+      <button className="btn w-[200px]" onClick={handleModal}>
         Add Rede de Células
       </button>
       <div className={isOpen ? "modal modal-open" : "modal"}>

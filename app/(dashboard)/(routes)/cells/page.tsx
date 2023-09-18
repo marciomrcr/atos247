@@ -4,7 +4,7 @@ import Link from "next/link";
 
 import { getCells } from "@/actions/getCells";
 import { getNetworks } from "@/actions/getNetworks";
-import { AlertCircleIcon } from "lucide-react";
+import { AlertCircleIcon, View } from "lucide-react";
 
 import { getMembers } from "@/actions/getMembers";
 import CellForm from "./CellForm";
@@ -50,8 +50,11 @@ async function CellPage() {
                         <td className='w-1/3'>{cell.name}</td>                    
                         <td className='w-1/3'>{cell.Network.name}</td> 
                         <td className='w-1/3'>
-                        <Link href={"/cells/" + cell.id} className='cursor-pointer hover:text-blue-500 hover:font-semibold underline'>
-                          {cell._count.member} Membros</Link></td>
+
+
+
+                        <Link href={"/cells/" + cell.id} className='cursor-pointer hover:text-blue-500 hover:font-semibold flex items-center gap-1'>
+                          {cell._count.member}<View /> </Link></td>
                         <td className='flex justify-center space-x-1'><DeleteCellForm id={cell.id}/>
                           <UpdateCellForm cell={cell}  networks={networks}/> 
                         </td>

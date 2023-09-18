@@ -53,7 +53,7 @@ async function NetworkPage() {
                     <td className="hidden md:flex">{index + 1}</td>
                     <td className="w-1/3">{network.name}</td>
                     <td className="w-1/3 flex items-center gap-1">  
-                    <Link href={"/networks/" + network.id} className='cursor-pointer hover:text-blue-500 hover:font-semibold underline flex items-center justify-center gap-1'>
+                    <Link href={"/networks/" + network.id} className='cursor-pointer hover:text-blue-500 hover:font-semibold  flex items-center  gap-1'>
                     {network._count.cell} <View/> </Link>                   
                                          
                     </td>
