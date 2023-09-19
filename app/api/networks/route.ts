@@ -19,16 +19,16 @@ export const GET = async (request: Request) =>{
       name: true,
       _count: {
         select: {
-          cell: true,
+          cells: true,
         },
       },
 
-      cell: {
+      cells: {
         select: {
           name: true,
           _count: {
             select: {
-              member: true,
+              members: true,
             },
           },
         },
