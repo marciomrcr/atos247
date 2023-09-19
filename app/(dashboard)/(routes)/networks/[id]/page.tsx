@@ -20,10 +20,10 @@ const getCells = cache(async (id: string) => {
       id: true,
       name: true,
       networkId: true,
-      Network: true,
+      network: true,
       _count: {
         select: {
-          member: true
+          members: true
         }
       }
     },
@@ -38,7 +38,7 @@ const getNetworkId = cache(async (id: string) => {
   const network = await prisma.network.findUnique({
     where: { id },
     include: {
-      cell: {
+      cells: {
         select: {
           id: true,
           name: true,
@@ -81,7 +81,7 @@ export default async function NetworkPage({
               <tr>
                 <th className="hidden md:flex">#</th>
                 <th>Células</th>
-                <th>Membros</th>
+                <th className="w-auto text-center">Membros</th>
                 
                 <th className="text-center">Ações</th>
               </tr>
@@ -89,11 +89,11 @@ export default async function NetworkPage({
             <tbody>
               {cells?.map((cell, index) => (
                 <tr key={cell.id}>
-                  <td className=' '>{index + 1}</td>
+                  <td className='hidden md:flex '>{index + 1}</td>
                   <td className='w-1/3'>{cell.name}</td>
                
-                  <td className='w-1/3'>
-                    {cell._count.member}</td>
+                  <td className='w-auto text-center'>
+                    {cell._count.members}</td>
                   <td className='flex justify-center space-x-1'>
                     <Link href={"/cells/" + cell.id} className='cursor-pointer hover:text-blue-500 hover:font-semibold underline flex items-center gap-1'>
                     <View /></Link>

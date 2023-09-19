@@ -10,11 +10,11 @@ export const getMemberById = async (id: string) => {
       name: true,
       email: true,
       cellId: true,
-      Cell: {
+      cell: {
         select: {
           name: true,
           id: true,
-          Network: {
+          network: {
             select: {
               name: true,
               id: true,

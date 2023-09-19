@@ -28,3 +28,11 @@ export const POST = async(request: Request) =>{
   })
   return NextResponse.json(member,{status: 201})
 }
+
+export const GET = async () => {
+  const members = await prisma.member.findMany({
+    
+    orderBy: { name: "asc" },
+  });
+  return NextResponse.json(members,{status: 201})
+}

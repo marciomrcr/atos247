@@ -7,16 +7,16 @@ export async function getNetworks() {
       name: true,
       _count: {
         select: {
-          cell: true,
+          cells: true,
         },
       },
 
-      cell: {
+      cells: {
         select: {
           name: true,
           _count: {
             select: {
-              member: true,
+              members: true,
             },
           },
         },

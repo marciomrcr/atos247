@@ -12,8 +12,8 @@ export const metadata: Metadata = {
 
 type Member = {
   id: string , 
-  name: string,
-  cellId: string
+  name: string 
+  cellId: string | undefined | null
   
 }
 

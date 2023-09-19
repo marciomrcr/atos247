@@ -22,13 +22,35 @@ const getCellById = cache(async (id: string) => {
       id: true,
       name: true,
       networkId: true,
-      Network: true,
-      _count: {
+      network: {
         select: {
-          member: true
+          name: true,
+          Supervision: {
+            select: {
+              member: {
+                select: {
+                  name: true,
+                }
+              }
+            }
+          }
         }
       },
-      member: {
+      Leadership: {
+        select: {          
+          member: {
+            select: {
+              name: true
+            }
+          }
+        }
+      },
+      _count: {
+        select: {
+          members: true
+        }
+      },
+      members: {
         select: {
           id: true,
           name: true,
@@ -45,29 +67,6 @@ const getCellById = cache(async (id: string) => {
   if (!cell) notFound();
   return cell;
 });
-// const getMembers = cache(async () => {
-//   const cell = await prisma.cell.findMany({
-//     where: {
-//       id
-//     },
-//     select: {
-//       id: true,
-//       name: true,
-//       networkId: true,
-//       Network: true,
-//       _count: {
-//         select: {
-//           member: true
-//         }
-//       }
-//     },    
-//   }
-//   );
-//   if (!cell) notFound();
-//   return cell;
-// });
-
-
 
 export async function generateMetadata({
   params: { id },
@@ -87,7 +86,13 @@ export default async function CellPage({
   return (
     <div>
 <div className="">  
-        <h1 className="flex items-end mx-4 font-bold text-2xl">Célula {cell.name}<span className="mx-2 font-normal text-base"> - Rede {cell.Network.name}</span></h1>
+        <h1 className="mx-4 font-bold text-base md:text-2xl">Célula {cell.name}</h1>
+        <h3 className="mx-2 font-normal text-base">
+          Líder: {!cell.Leadership?.member.name ? "Líder não cadastrado" : cell.Leadership?.member.name }</h3>
+        <h3 className="mx-2 font-normal text-base">
+          Supervisor: {cell.network.Supervision?.member?.name}</h3>
+        <h3 className="mx-2 font-normal text-base">
+          Rede {cell.network.name}</h3>
 </div>
       <div>
         {!cell ? (
@@ -99,19 +104,18 @@ export default async function CellPage({
               <tr>  
               <th className="hidden md:flex">#</th>
                 <th>Nome</th>
-                <th>Email</th>
-                
-                <th className="text-center">Ações</th>
+                <th className="hidden md:table-cell">Email</th>                
+                <th className="text-end md:text-center ">Ações</th>
               </tr>
             </thead>
             <tbody>
-              { cell.member.map((item, index)=>(
+              { cell.members.map((item, index)=>(
                 <tr key={item.id}>                 
                   <td className="hidden md:flex">{index + 1}</td>
-                  <td className='w-1/3'>{item.name}</td>
-                  <td className='w-1/3'>{item.email}</td>
+                  <td className='w-auto'>{item.name}</td>
+                  <td className='hidden md:table-cell'>{item.email}</td>
                  
-                  <td className='flex justify-center space-x-1'><Link href={"/members/" + item.id} className='cursor-pointer hover:text-blue-500 hover:font-semibold underline flex items-center gap-1'>
+                  <td className='flex justify-end md:justify-center space-x-1'><Link href={"/members/" + item.id} className='cursor-pointer hover:text-blue-500 hover:font-semibold underline flex items-center gap-1'>
                     <View /></Link>
                   </td>
                 </tr>

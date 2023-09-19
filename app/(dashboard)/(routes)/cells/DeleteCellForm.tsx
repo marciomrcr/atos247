@@ -32,8 +32,8 @@ const router = useRouter()
     
   }
   return (
-    <div>
-      <Trash2 onClick={handleModal} className="cursor-pointer"   
+    <div className='mb-0'>
+      <Trash2 onClick={handleModal} className="cursor-pointer bm-0"   
           />
       {/* <button className='btn btn-error btn-sm' onClick={handleModal}>Excluir</button> */}
       <div className={

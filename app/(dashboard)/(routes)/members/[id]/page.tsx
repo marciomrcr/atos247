@@ -18,22 +18,46 @@ const getMemberById = cache(async (id: string) => {
       id: true,
       name: true,
       email: true,
-      isLeader: true,
-      Cell: {
+      active: true,
+      cellId: true,
+      cell:{
         select: {          
           name: true,
           id: true,
-          Network: {
+          network: {
             select: {
               id: true,
               name: true
             }
+          }, 
+        }
+      },
+      Leadership: {
+        select: {
+          member: {
+            select: {
+              name: true
+            }
           }
         }
+      },
+      Supervision: {
+        select: {
+          member: {
+            select: {
+              name: true
+            }
+          }
+        }
+      },
+
+      
+
+       
       },      
     }   
     
-  });
+  );
   if (!member) notFound();
   return member;
 });
@@ -66,18 +90,20 @@ export default async function NetworkPage({
               <tr>                
                 <th>Nome</th>
                 <th>Célula</th>
-                <th>Rede</th>
-                <th>Email</th>                
+                <th className="hidden md:table-cell">Rede</th>
+                <th className="hidden md:table-cell">Email</th>                
+                <th className="hidden md:table-cell">Ativo</th>                
                 <th className="text-center">Ações</th>
               </tr>
             </thead>
             <tbody>
              
                 <tr key={member.id}>                  
-                  <td className='w-1/3'>{member.name}</td>               
-                  <td className='w-1/3'>{member.Cell.name}</td>               
-                  <td className='w-1/3'>{member.Cell.Network.name}</td>               
-                  <td className='w-1/3'>{member.email}</td>
+                  <td className='w-auto'>{member.name}</td>               
+                  <td className='w-auto'>{member.cell.name}</td>               
+                  <td className='w-auto hidden md:table-cell'>{member.cell.network.name}</td>               
+                  <td className='hidden md:table-cell'>{member.email}</td>
+                  <td className='hidden md:table-cell'>{member.active === true ? "Ativo" : "Inativo"}</td>
                   <td className='flex justify-center space-x-1'>
                     <Link href={"/members/" + member.id} className='cursor-pointer hover:text-blue-500 hover:font-semibold underline flex items-center gap-1'>
                     <Edit /></Link>

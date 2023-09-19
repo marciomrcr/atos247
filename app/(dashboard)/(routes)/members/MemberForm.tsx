@@ -39,8 +39,9 @@ const formSchema = z.object({
     .string()
     .trim()
     .nonempty('O email não pode ficar em branco!')
-    .email('Digite um email inválido!'),
-  cellId: z.string().nonempty('Escolha uma rede!'),
+    .email('Digite um email inválido!')
+    .toLowerCase(),
+  cellId: z.string().nonempty('Escolha uma rede'),
 });
 
 type Member = z.infer<typeof formSchema>;

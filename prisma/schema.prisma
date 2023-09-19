@@ -11,69 +11,76 @@ datasource db {
 }
 
 model Member {
-  id       String   @id @default(auto()) @map("_id") @db.ObjectId
-  name     String
-  email    String   @unique
-  cellId   String   @db.ObjectId
-  isLeader Boolean?
-  Cell     Cell     @relation(fields: [cellId], references: [id])
+  id    String @id @default(auto()) @map("_id") @db.ObjectId
+  name  String
+  email String @unique
+
+  active Boolean @default(true)
+
+  Leadership  Leadership[]
+  Supervision Supervision[]
+  cell        Cell          @relation(fields: [cellId], references: [id])
+  cellId      String        @db.ObjectId
 
   @@map("membros")
+}
+
+model Cell {
+  id   String @id @default(auto()) @map("_id") @db.ObjectId
+  name String @unique
+
+  networkId String @db.ObjectId
+
+  createdAt    DateTime    @default(now())
+  updatedAt    DateTime    @updatedAt
+  members      Member[]
+  network      Network     @relation(fields: [networkId], references: [id])
+  Leadership   Leadership? @relation(fields: [leadershipId], references: [id])
+  leadershipId String?     @db.ObjectId
+
+  @@map("celulas")
 }
 
 model Network {
   id   String @id @default(auto()) @map("_id") @db.ObjectId
   name String @unique
-  cell Cell[]
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  //Lead      Lead[]
+  createdAt     DateTime     @default(now())
+  updatedAt     DateTime     @updatedAt
+  cells         Cell[]
+  Supervision   Supervision? @relation(fields: [supervisionId], references: [id])
+  supervisionId String?      @db.ObjectId
 
   @@map("redes")
 }
 
-model Cell {
-  id        String @id @default(auto()) @map("_id") @db.ObjectId
-  name      String @unique
-  networkId String @db.ObjectId
+model Leadership {
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+
+  memberId String @db.ObjectId
+  member   Member @relation(fields: [memberId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+  startDate DateTime
+  endDate   DateTime?
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  Network   Network  @relation(fields: [networkId], references: [id])
-  member    Member[]
+  cells     Cell[]
 
-  //Lead      Lead[]
-  //member    Member[]
-
-  @@map("celulas")
+  @@map("lideres")
 }
 
-// model Lead {
-//   id        String @id @default(auto()) @map("_id") @db.ObjectId
-//   memberId  String @db.ObjectId
-//   networkId String @db.ObjectId
-//   cellId    String @db.ObjectId
+model Supervision {
+  id       String  @id @default(auto()) @map("_id") @db.ObjectId
+  memberId String  @db.ObjectId
+  member   Member? @relation(fields: [memberId], references: [id], onDelete: NoAction, onUpdate: NoAction)
 
-//   createdAt DateTime @default(now())
-//   updatedAt DateTime @updatedAt
-//   network   Network  @relation(fields: [networkId], references: [id])
-//   cell      Cell     @relation(fields: [cellId], references: [id])
-//   member    Member   @relation(fields: [memberId], references: [id])
+  startDate DateTime
+  endDate   DateTime?
 
-//   @@map("lideres")
-// }
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  network   Network[]
 
-// model Member {
-//   id    String @id @default(auto()) @map("_id") @db.ObjectId
-//   name  String
-//   email String @unique
-
-//   createdAt DateTime @default(now())
-//   updatedAt DateTime @updatedAt
-//   Lead      Lead[]
-//   Cell      Cell?    @relation(fields: [cellId], references: [id])
-//   cellId    String?  @db.ObjectId
-
-//   @@map("membros")
-// }
+  @@map("supervisores")
+}

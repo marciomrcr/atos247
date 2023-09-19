@@ -46,7 +46,7 @@ interface IMemberForm{
     id: string,
     name: string,
     email: string,
-    cellId: string
+    cellId:string
   },
   cells: {
     id: string,
@@ -94,7 +94,7 @@ export default function UpdateMemberForm({ cells, member }: IMemberForm) {
   useEffect(() => {
     setValue('name', member.name);
     setValue('email', member.email);
-    setValue('cellId', member.cellId);
+    setValue('cellId', member?.cellId);
   }, [member, setValue]);
 
   return (

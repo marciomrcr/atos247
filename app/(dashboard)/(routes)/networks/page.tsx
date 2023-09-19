@@ -46,8 +46,8 @@ async function NetworkPage() {
               
               {networks?.map((network, index) => {
                 // Calcula o total de membros
-                const totalMembers = network.cell.reduce(
-                  (total, item) => total + item._count.member,
+                const totalMembers = network.cells.reduce(
+                  (total, item) => total + item._count.members,
                   0
                 );
 
@@ -57,7 +57,7 @@ async function NetworkPage() {
                     <td className="w-1/3">{network.name}</td>
                     <td className="w-1/3 flex items-center gap-1">  
                     <Link href={"/networks/" + network.id} className='cursor-pointer hover:text-blue-500 hover:font-semibold  flex items-center  gap-1'>
-                    {network._count.cell} <View/> </Link>                   
+                    {network._count.cells} <View/> </Link>                   
                                          
                     </td>
                     <td className="w-1/3">{totalMembers}</td>

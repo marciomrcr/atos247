@@ -36,7 +36,7 @@ async function CellPage() {
           <table className="table w-full">
                  <thead>
                    <tr>
-                     <th className=' '>#</th>
+                     <th className='hidden md:table-cell'>#</th>
                      <th>Célula</th>
                      <th>Rede</th>
                      <th>Membros</th>
@@ -46,16 +46,13 @@ async function CellPage() {
                  <tbody>
                    {cells?.map((cell, index) => (
                       <tr key={cell.id}>
-                        <td className=' '>{index + 1}</td>
-                        <td className='w-1/3'>{cell.name}</td>                    
-                        <td className='w-1/3'>{cell.Network.name}</td> 
-                        <td className='w-1/3'>
-
-
-
-                        <Link href={"/cells/" + cell.id} className='cursor-pointer hover:text-blue-500 hover:font-semibold flex items-center gap-1'>
-                          {cell._count.member}<View /> </Link></td>
-                        <td className='flex justify-center space-x-1'><DeleteCellForm id={cell.id}/>
+                        <td className='hidden md:table-cell'>{index + 1}</td>
+                        <td className='w-auto'>{cell.name}</td>                    
+                        <td className='w-auto'>{cell.network.name}</td> 
+                        <td className='w-auto'>
+                        <Link href={"/cells/" + cell.id} className='cursor-pointer hover:text-blue-500 hover:font-semibold flex items-center justify-center gap-1'>
+                          {cell._count.members}<View /> </Link></td>
+                        <td className='flex items-center justify-center mx-1'><DeleteCellForm id={cell.id}/>
                           <UpdateCellForm cell={cell}  networks={networks}/> 
                         </td>
         

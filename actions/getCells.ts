@@ -6,13 +6,13 @@ export const getCells = async () => {
       id: true,
       name: true,
       networkId: true,
-      Network: true,
+      network: true,
       _count: {
         select: {
-          member: true,
+          members: true,
         },
       },
-      member: {
+      members: {
         select: {
           id: true,
           name: true,
