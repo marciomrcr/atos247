@@ -90,14 +90,20 @@ export default async function CellPage({
         <h3 className="mx-2 font-normal text-base">
           Líder: {!cell.Leadership?.member.name ? "Líder não cadastrado" : cell.Leadership?.member.name }</h3>
         <h3 className="mx-2 font-normal text-base">
-          Supervisor: {cell.network.Supervision?.member?.name}</h3>
+          Supervisor: {!cell.network.Supervision?.member?.name ? "Supervisor não cadastrado" : cell.network.Supervision?.member?.name}</h3>
         <h3 className="mx-2 font-normal text-base">
           Rede {cell.network.name}</h3>
 </div>
       <div>
-        {!cell ? (
-          <div className="flex items-center justify-center space-x-2 mt-6" ><AlertCircleIcon />
-            <p className='text-red-600 text-xl text-center'>Nenhuma célula cadastrada. Cadastre a primeira rede 👨‍👩‍👧‍👦 </p></div>
+        {cell.members.length === 0? (
+          <div>
+          <div className="flex items-center justify-center " > 
+          <div className="flex mt-6">
+          <AlertCircleIcon className="" />     
+            
+            <p className='text-red-600 ml-2 text-xl text-center'>Nenhum membro cadastrado.</p> </div>
+            
+            </div><p className="text-center"> Cadastre os membros da célula 👨‍👩‍👧‍👦 </p></div>
         ) : (
           <table className="table w-full bg-slate-100">
             <thead>
@@ -111,8 +117,9 @@ export default async function CellPage({
             <tbody>
               { cell.members.map((item, index)=>(
                 <tr key={item.id}>                 
-                  <td className="hidden md:flex">{index + 1}</td>
-                  <td className='w-auto'>{item.name}</td>
+                  <td className="hidden md:flex">{index + 1}</td>              
+                     <td className='w-auto'>{item.name} </td>
+                      <td className='hidden md:table-cell'>{item.email}</td> 
                   <td className='hidden md:table-cell'>{item.email}</td>
                  
                   <td className='flex justify-end md:justify-center space-x-1'><Link href={"/members/" + item.id} className='cursor-pointer hover:text-blue-500 hover:font-semibold underline flex items-center gap-1'>
