@@ -86,7 +86,7 @@ export default async function CellPage({
   return (
     <div>
 <div className="">  
-        <h1 className="mx-4 font-bold text-base md:text-2xl">Célula {cell.name}</h1>
+        <h1 className="mx-2 font-bold text-base md:text-2xl">Célula {cell.name}</h1>
         <h3 className="mx-2 font-normal text-base">
           Líder: {!cell.Leadership?.member.name ? "Líder não cadastrado" : cell.Leadership?.member.name }</h3>
         <h3 className="mx-2 font-normal text-base">
