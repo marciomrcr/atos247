@@ -1,3 +1,4 @@
+import { prisma } from "@/libs/prisma";
 import { Cross } from 'lucide-react';
 import Link from "next/link";
 
@@ -26,7 +27,21 @@ export const metadata: Metadata = {
   description: "Visão geral da gestão de células.",
 }
 
-const LandingPage = () => {
+async function getNetworks() {
+  const res = await prisma.network.count();
+  return res;
+}
+async function getCells() {
+  const res = await prisma.cell.count();
+  return res;
+}
+async function getMembers() {
+  const res = await prisma.member.count();
+  return res;
+}
+
+const LandingPage = async () => {
+  const [members, network, cells] = await Promise.all( [getMembers(), getNetworks(), getCells()])
   return (
     <div className="bg-[#111827]">      
            
@@ -109,7 +124,7 @@ const LandingPage = () => {
                     </svg>
                   </CardHeader>
                   <CardContent>
-                  <div className="text-2xl font-bold text-gray-100">489</div>
+                  <div className="text-2xl font-bold text-gray-100">{cells}</div>
                     <p className="text-xs text-muted-foreground text-gray-100">
                       +180.1% from last month
                     </p>
@@ -133,7 +148,7 @@ const LandingPage = () => {
                     </svg>
                   </CardHeader>
                   <CardContent>
-                  <div className="text-2xl font-bold text-gray-100">489</div>
+                  <div className="text-2xl font-bold text-gray-100">{network}</div>
                     <p className="text-xs text-muted-foreground text-gray-100">
                       +19% from last month
                     </p>
@@ -154,11 +169,13 @@ const LandingPage = () => {
                       strokeWidth="2"
                       className="h-8 w-8 text-gray-100"
                     >
-                      <path d="M22 12h-4l-3 9L9 3l-3 9H2" />
+                      <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
+                      <circle cx="9" cy="7" r="4" />
+                      <path d="M22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75" />
                     </svg>
                   </CardHeader>
                   <CardContent>
-                  <div className="text-2xl font-bold text-gray-100">489</div>
+                  <div className="text-2xl font-bold text-gray-100">{members}</div>
                     <p className="text-xs text-muted-foreground text-gray-100">
                       +201 since last year
                     </p>
