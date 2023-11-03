@@ -10,77 +10,101 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Member {
-  id    String @id @default(auto()) @map("_id") @db.ObjectId
-  name  String
-  email String @unique
+model Address {
+  id          String @id @default(auto()) @map("_id") @db.ObjectId
+  personId    String @unique @db.ObjectId
+  zip         String
+  logradouro  String
+  numero      String
+  complemento String
+  bairro      String
+  cidade      String
 
-  active Boolean @default(true)
-
-  Leadership  Leadership[]
-  Supervision Supervision[]
-  cell        Cell          @relation(fields: [cellId], references: [id])
-  cellId      String        @db.ObjectId
-
-  @@map("membros")
+  person Person @relation(fields: [personId], references: [id])
 }
 
-model Cell {
-  id   String @id @default(auto()) @map("_id") @db.ObjectId
-  name String @unique
+model Person {
+  id        String      @id @default(auto()) @map("_id") @db.ObjectId
+  name      String
+  email     String      @unique
+  phone     Int
+  birthDay  DateTime
+  origem    Origem      @default(Existente)
+  batismo   DateTime?
+  Membresia Membresia[]
+  Address   Address?
 
-  networkId String @db.ObjectId
+  @@map("pessoas")
+}
 
-  createdAt    DateTime    @default(now())
-  updatedAt    DateTime    @updatedAt
-  members      Member[]
-  network      Network     @relation(fields: [networkId], references: [id])
-  Leadership   Leadership? @relation(fields: [leadershipId], references: [id])
-  leadershipId String?     @db.ObjectId
+type Phone {
+  phone1 String
+  phone2 String
+}
 
-  @@map("celulas")
+enum Origem {
+  Outra_igreja
+  Batismo
+  Existente
 }
 
 model Network {
   id   String @id @default(auto()) @map("_id") @db.ObjectId
   name String @unique
 
-  createdAt     DateTime     @default(now())
-  updatedAt     DateTime     @updatedAt
-  cells         Cell[]
-  Supervision   Supervision? @relation(fields: [supervisionId], references: [id])
-  supervisionId String?      @db.ObjectId
+  active        Boolean @default(true)
+  multiplicacao Boolean @default(false)
+  redeOrigemId  String? @db.ObjectId
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  cells     Cell[]
+  Membresia Membresia[]
 
   @@map("redes")
 }
 
-model Leadership {
-  id String @id @default(auto()) @map("_id") @db.ObjectId
+model Cell {
+  id        String @id @default(auto()) @map("_id") @db.ObjectId
+  name      String
+  networkId String @db.ObjectId
 
-  memberId String @db.ObjectId
-  member   Member @relation(fields: [memberId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  multiplicacao    Boolean @default(false)
+  celulaDeOrigemId String? @db.ObjectId
 
-  startDate DateTime
-  endDate   DateTime?
+  active Boolean @default(true)
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  cells     Cell[]
+  network Network @relation(fields: [networkId], references: [id])
 
-  @@map("lideres")
+  createdAt DateTime    @default(now())
+  updatedAt DateTime    @updatedAt
+  Membresia Membresia[]
+
+  @@index([name, networkId])
+  @@map("celulas")
 }
 
-model Supervision {
-  id       String  @id @default(auto()) @map("_id") @db.ObjectId
-  memberId String  @db.ObjectId
-  member   Member? @relation(fields: [memberId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+model Responsibility {
+  id        String      @id @default(auto()) @map("_id") @db.ObjectId
+  name      String      @unique
+  membresia Membresia[]
 
-  startDate DateTime
-  endDate   DateTime?
+  @@map("Responsibilitys")
+}
 
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
-  network   Network[]
+model Membresia {
+  id               String  @id @default(auto()) @map("_id") @db.ObjectId
+  personId         String  @db.ObjectId
+  responsibilityId String  @db.ObjectId
+  cellId           String? @db.ObjectId
+  networkId        String? @db.ObjectId
 
-  @@map("supervisores")
+  person         Person         @relation(fields: [personId], references: [id])
+  responsibility Responsibility @relation(fields: [responsibilityId], references: [id])
+  cell           Cell?          @relation(fields: [cellId], references: [id])
+  network        Network?       @relation(fields: [networkId], references: [id])
+
+  @@index([personId, responsibilityId])
+  @@map("membros")
 }

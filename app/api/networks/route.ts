@@ -28,7 +28,7 @@ export const GET = async (request: Request) =>{
           name: true,
           _count: {
             select: {
-              members: true,
+              Membresia: true,
             },
           },
         },

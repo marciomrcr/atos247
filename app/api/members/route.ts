@@ -1,38 +1,54 @@
 import { prisma } from "@/libs/prisma";
-import type { Member } from '@prisma/client';
 import { NextResponse } from "next/server";
 
 
-export const POST = async(request: Request) =>{
-  const body: Member = await request.json()
-     
-    const getMember = await prisma.member.findUnique({
-      where: {
-        email: body.email,        
-      }, select: {
-        name: true,
-        email: true
-      }
-    })
-    if(getMember){
-      return NextResponse.json(`Membro já cadastrado! - ${getMember.name} | ${getMember.email} `)
-    }
-  
-  const member = await prisma.member.create({
-    data: {
-      name: body.name,
-      email: body.email,
-      cellId: body.cellId
+export const POST = async (request: Request) => {
+  const body = await request.json();
+  const { personId, responsibilityId } = body;
 
-    }
-  })
-  return NextResponse.json(member,{status: 201})
-}
+  const membresiaExists = await prisma.membresia.findFirst({
+    where: {
+      personId,
+      responsibilityId,
+    },
+    select: {
+     
+      person: {
+        select: {
+          name: true
+        }
+      },
+      responsibility: {
+        select: {
+          name: true
+        }
+      },
+    },
+  });
+
+  if (membresiaExists) {
+    return NextResponse.json({
+      message: `${membresiaExists.person.name} já foi cadastrado anteriormente como ${membresiaExists.responsibility.name} `,
+      status: 409,
+    });
+  }
+
+  const membresia = await prisma.membresia.create({
+    data: {
+      personId,
+      responsibilityId,
+    },
+  });
+
+  return NextResponse.json(membresia);
+};
 
 export const GET = async () => {
-  const members = await prisma.member.findMany({
+  const Membresias = await prisma.membresia.findMany({
     
-    orderBy: { name: "asc" },
+    orderBy: { responsibility: {
+      name: 'asc'
+    } },
   });
-  return NextResponse.json(members,{status: 201})
+  return NextResponse.json(Membresias,{status: 201})
 }

@@ -2,13 +2,15 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 
+import { format } from 'date-fns';
+
 import { getCells } from "@/actions/getCells";
 import { AlertCircleIcon, View } from "lucide-react";
 
 import { getMembers } from "@/actions/getMembers";
-import DeleteMemberForm from "./DeleteMemberForm";
-import MemberForm from "./MemberForm";
-import UpdateMemberForm from "./UpdateMemberForm";
+
+
+import PersonForm from "./PersonForm";
 
 
 export const metadata: Metadata = {
@@ -18,11 +20,20 @@ export const metadata: Metadata = {
 async function MemberPage() {
   const [persons, cells] = await Promise.all([getMembers(), getCells()])
 
+  const formatDate = (dateString: Date) => {
+    const date = new Date(dateString);
+    if (!isNaN(date.getTime())) {
+      return format(date, 'dd/MM/yy');
+    } else {
+      return 'Data inválida';
+    }
+  };
+
 
   return (
     <div className="mt-3">
-      <div className=" mb-4 px-3">
-        <MemberForm cells={cells} />
+      <div className=" mb-4">
+        <PersonForm  />
       </div>
 
       <div>
@@ -35,10 +46,12 @@ async function MemberPage() {
               <tr>
                 <th className='hidden md:table-cell'>#</th>
                 <th>Nome</th>
+                <th className="hidden md:table-cell">email</th>
+                <th>Fone</th>
+                <th className="hidden md:table-cell">Origem</th>
+                <th className="hidden md:table-cell">Nascimento</th>
                 <th>Célula</th>
-                <th className="hidden md:table-cell">Rede</th>
-                <th className="hidden md:table-cell">Email</th>
-                <th className="hidden md:table-cell">Fone</th>
+                <th className="hidden md:table-cell">Rede</th>             
                 <th className="text-center">Ações</th>
               </tr>
             </thead>
@@ -48,6 +61,10 @@ async function MemberPage() {
                 <tr key={person.id}>
                   <td className='hidden md:table-cell'>{index + 1}</td>
                   <td className='w-auto'>{person.name}</td>
+                  <td className='hidden md:table-cell'>{person.email}</td>
+                  <td >{person.phone}</td>
+                  <td className='hidden md:table-cell'>{person.origem}</td>
+                  <td className='hidden md:table-cell'>{formatDate(person.birthDay)}</td>
                   <td className=''>
                     <Link href={"/cells/" + person.Membresia.map((item)=> item.cellId)} className='cursor-pointer hover:text-blue-500 hover:font-semibold underline'>
                     {person.Membresia.map((item)=> item.cell?.name)}</Link></td>
@@ -56,14 +73,12 @@ async function MemberPage() {
                     <Link href={"/networks/" + person.Membresia.map((item)=> item.cell?.network.id)} className='cursor-pointer hover:text-blue-500 hover:font-semibold underline'>
                     {person.Membresia.map((item)=> item.cell?.network.name)}</Link></td>
 
-                  <td className='hidden md:table-cell'>{person.email}</td>
-                  <td className='hidden md:table-cell'>{person.phone}</td>
                   <td className='flex justify-center items-center space-x-1'>
-                    <DeleteMemberForm id={person.id} name={person.name} email={person.email}  />
-                    <UpdateMemberForm  person={person} />
+                    {/* <DeleteMemberForm id={person.id} name={person.name} email={person.email}  />
+                    <UpdateMemberForm  person={person} /> */}
                     <Link href={"/persons/" + person.id} className='cursor-pointer hover:text-blue-500 hover:font-semibold underline flex items-center gap-1'>
                       <View /></Link>
-                      
+                      {/* <PersonUpdate person={person} /> */}
                       
                   </td>
                 </tr>

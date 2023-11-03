@@ -7,20 +7,10 @@ export const getCells = async () => {
       name: true,
       networkId: true,
       network: true,
-      _count: {
-        select: {
-          members: true,
-        },
-      },
-      members: {
-        select: {
-          id: true,
-          name: true,
-        },
-        orderBy: {
-          name: "asc",
-        },
-      },
+      
+     
+        
+      
     },
     orderBy: { name: "asc" },
   });

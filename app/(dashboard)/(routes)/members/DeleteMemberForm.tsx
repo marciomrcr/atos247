@@ -12,8 +12,9 @@ export const metadata: Metadata = {
 
 type Member = {
   id: string , 
-  name: string 
-  cellId: string | undefined | null
+  name: string,
+  email: string,
+  
   
 }
 
@@ -23,7 +24,7 @@ const router = useRouter()
   const [isOpen, setIsOpen] = useState(false)
 
   const handleDelete = async (id: string) =>{
-        await axios.delete(`api/members/${id}`)
+        await axios.delete(`api/persons/${id}`)
         router.refresh()
     setIsOpen(false)
   }

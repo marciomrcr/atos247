@@ -23,7 +23,7 @@ const getCells = cache(async (id: string) => {
       network: true,
       _count: {
         select: {
-          members: true
+          Membresia: true
         }
       }
     },
@@ -42,6 +42,21 @@ const getNetworkId = cache(async (id: string) => {
         select: {
           id: true,
           name: true,
+          _count: {
+            select: {
+              Membresia: true
+            }
+          },
+          Membresia: {
+            select: {
+              responsibility: {
+                select: {
+                  name: true,
+                  
+                }
+              }
+            }
+          }
         },
         orderBy: {
           name: 'desc'
@@ -72,9 +87,9 @@ export default async function NetworkPage({
     <div >
       <h1 className="flex items-center mb-4 mx-4 font-bold text-2xl">Rede de células {network.name}</h1>
             <div>
-        {!network ? (
+        {network.cells.length === 0 ? (
           <div className="flex items-center justify-center space-x-2 mt-6" ><AlertCircleIcon />
-            <p className='text-red-600 text-xl text-center'>Nenhuma rede cadastrada. Cadastre a primeira rede 👨‍👩‍👧‍👦 </p></div>
+            <p className='text-red-600 text-xl text-center'>Nenhuma célula cadastrada. Cadastre a primeira célula 👨‍👩‍👧‍👦 </p></div>
         ) : (
           <table className="table w-full bg-slate-100">
             <thead>
@@ -87,13 +102,12 @@ export default async function NetworkPage({
               </tr>
             </thead>
             <tbody>
-              {cells?.map((cell, index) => (
+              {network.cells?.map((cell, index) => (
                 <tr key={cell.id}>
                   <td className='hidden md:flex '>{index + 1}</td>
-                  <td className='w-1/3'>{cell.name}</td>
-               
+                  <td className='w-1/3'>{cell.name}</td>               
                   <td className='w-auto text-center'>
-                    {cell._count.members}</td>
+                    {cell._count.Membresia}</td>
                   <td className='flex justify-center space-x-1'>
                     <Link href={"/cells/" + cell.id} className='cursor-pointer hover:text-blue-500 hover:font-semibold underline flex items-center gap-1'>
                     <View /></Link>

@@ -15,8 +15,9 @@ export const metadata: Metadata = {
 const formSchema = z.object({
 
   name: z.string().trim()
-  .nonempty('Nome é obrigatório!')
+  .nonempty('O nome não pode ficar em branco!')
   .min(3, { message: 'O nome deverá ter pelo menos 3 letras!' })
+  .trim(),
   
 });
 
@@ -31,7 +32,12 @@ interface IFormProps {
 
 export default function NetworkUpdate({ network }: IFormProps) {
   const router = useRouter();
-  const { handleSubmit, control, setValue,reset, formState: {errors} } = useForm({
+  const { handleSubmit, 
+    control, 
+    setValue,
+    reset, 
+    formState: {errors},
+   } = useForm<Network>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       name: network.name,
@@ -40,15 +46,15 @@ export default function NetworkUpdate({ network }: IFormProps) {
   
   const [isOpen, setIsOpen] = useState(false)
 
-  const onSubmit = async (data: { name: string }) => {
-    // Transforme a primeira letra da primeira palavra em maiúscula
-    const formattedName = data.name.charAt(0).toUpperCase() + data.name.slice(1);
+  const onSubmit = async (data: Network) => {
+    
     try {
       await axios.patch(`api/networks/${network.id}`, {
-        name: formattedName,
+        name: data.name
       });
 
       router.refresh();
+      
       setIsOpen(false)
     } catch (error) {
       console.error('Erro ao atualizar a rede:', error);
@@ -57,16 +63,16 @@ export default function NetworkUpdate({ network }: IFormProps) {
 
   useEffect(() => {
     setValue('name', network.name);
-  }, [network.name, setValue]);
+  }, [network, setValue]);
 
-  const handleModal = () => {
-    setIsOpen(!isOpen)
-    reset()   
-  };
+  // const handleModal = () => {
+  //   setIsOpen(!isOpen)
+  //   reset()   
+  // };
 
   return (
     <div>
-      <Edit className="cursor-pointer" onClick={handleModal} />
+      <Edit className="cursor-pointer" onClick={() => setIsOpen(true)} />
 
       <div className={isOpen ? 'modal modal-open' : 'modal'}>
         <div className="modal-box mb-72">
@@ -92,7 +98,7 @@ export default function NetworkUpdate({ network }: IFormProps) {
             </div>
 
             <div className="modal-action">
-              <div onClick={handleModal} className="cursor-pointer flex items-center">
+              <div onClick={() => setIsOpen(false)}className="cursor-pointer flex items-center">
                 <XOctagon className="text-red-600" />
                 <span className="text-red-600 px-2">Cancelar</span>
               </div>

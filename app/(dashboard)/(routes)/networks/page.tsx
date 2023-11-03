@@ -12,9 +12,15 @@ export const metadata: Metadata = {
   title: "Redes de Células - Jetro",
 };
 
+interface CellPageProps {
+  params: {
+    id: string;
+  };
+}
+
 async function NetworkPage() {
   const networks = await getNetworks();
-  //const members = await countMembers();
+
 
   return (
     <div className="mt-3">
@@ -39,6 +45,8 @@ async function NetworkPage() {
                 <th>Nome</th>
                 <th>Células</th>
                 <th>Membros</th>
+                <th>Pr. rede</th>
+                
                 <th className="text-center">Ações</th>
               </tr>
             </thead>
@@ -47,20 +55,20 @@ async function NetworkPage() {
               {networks?.map((network, index) => {
                 // Calcula o total de membros
                 const totalMembers = network.cells.reduce(
-                  (total, item) => total + item._count.members,
+                  (total, item) => total + item._count.Membresia,
                   0
                 );
-
                 return (
                   <tr key={network.id}>
                     <td className="hidden md:flex">{index + 1}</td>
-                    <td className="w-1/3">{network.name}</td>
-                    <td className="w-1/3 flex items-center gap-1">  
-                    <Link href={"/networks/" + network.id} className='cursor-pointer hover:text-blue-500 hover:font-semibold  flex items-center  gap-1'>
-                    {network._count.cells} <View/> </Link>                   
-                                         
+                    <td className="w-auto">{network.name}</td>
+                    <td className="w-auto flex items-center gap-1">  
+                    <Link href={"/networks/" + network.id} className='cursor-pointer hover:text-blue-500 hover:font-semibold w-auto flex items-center  gap-1'>
+                    {network._count.cells} <View/> </Link>
                     </td>
-                    <td className="w-1/3">{totalMembers}</td>
+                    <td className="w-1/6">{totalMembers}</td>
+                    <td className="w-auto">{network.Membresia.map((item)=> item.person.name)}</td>
+                    
                     <td className="flex justify-center space-x-1">  
                       <NetworkDelete id={network.id} />
                       <NetworkUpdate network={network} /> 

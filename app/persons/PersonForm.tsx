@@ -42,16 +42,28 @@ const formSchema = z.object({
     .email('Digite um email inválido!')
     .toLowerCase(),
  
-  origem: z.enum(["Outra_igreja", "Batismo", "Existente", ]).optional(),
-  batismo: z.string().optional(),
-  birthDay: z.string().optional()
+  origem: z.enum(["Outra_igreja", "Batismo", "Existente"], {
+    errorMap: () => {
+      return {message: 'Escolha uma opção!'}
+    }
+  }),
+  phone: z.number({
+    errorMap: () =>{
+      return {message: 'Informe um número válido: 91999999999'}
+    }
+  }).positive('Números maiores ou iguais a zero').lte(99999999999, 'Informe um número válido').gte(11111111111, 'Informe um DDD + número válidos'),
+  birthDay: z.string().pipe(z.coerce.date())
+  // z.date().min(new Date("1923-01-01"), { message: "Idade máxima 110 anos" }).max(new Date("2009-01-01"), { message: "Tem que ter no mínimo 14 anos!" })
+  // .refine((date)=> new Date(date).toString() !== 'Data inválida',{
+  //   message: 'É necessário um data válida',
+  // }).transform((date) => new Date(date))
 
 });
 
 type Member = z.infer<typeof formSchema>;
 type Cell = z.infer<typeof cellSchema>;
 
-export default function MemberForm({ cells }: { cells: Cell[] }) {
+export default function PersonForm() {
   const {
     handleSubmit,
     register,
@@ -159,8 +171,57 @@ export default function MemberForm({ cells }: { cells: Cell[] }) {
               )}
             </div>
 
-            {/* Adicione validação para cellId, se necessário */}
-           
+            <div>
+              <label className="text-gray-200 mt-2">Telefone</label>
+              <input
+                placeholder="Telefone 91999999999"
+                type="text"
+                autoComplete="off"
+                className={`mb-3 w-full input input-bordered ${
+                  errors.phone ? "input-error" : ""
+                }`}
+                {...register("phone", {
+                  setValueAs: (Value: string) => parseInt(Value)
+                })}
+              />
+              {errors.phone && (
+                <p className="text-red-500">{errors.phone.message}</p>
+              )}
+            </div>
+
+            <div>
+              <label className="text-gray-200 mt-2">Nascimento</label>
+              <input
+                placeholder="dd/mm/aaaa"
+                type="date"               
+                className={`mb-3 w-full input input-bordered ${
+                  errors.birthDay ? "input-error" : ""
+                }`}
+                {...register("birthDay")}
+              />
+              {errors.birthDay && (
+                <p className="text-red-500">{errors.birthDay.message}</p>
+              )}
+            </div>
+
+            <div>
+          
+            <label>Origen do membro?</label>
+      <select 
+      className={`mb-3 w-full input input-bordered ${
+        errors.name ? "input-error" : ""
+      }`}
+      
+      {...register("origem")}>
+        <option value="Existente">Existente</option>
+        <option value="Batismo">Batismo</option>
+        <option value="Outra_igreja">Outra igreja/denominação</option>
+      </select>
+      {errors.origem && (
+                <p className="text-red-500">{errors.origem.message}</p>
+              )}
+      </div>
+
 
             <div className="modal-action">
               <button

@@ -20,11 +20,8 @@ const networkSchema = z.object({
   .nonempty('O nome não pode ficar em branco!')
   .min(3, "O Nome deverá ter pelo menos 3 letras.")
   .trim()
-  .transform(name =>{
-    return name.trim().split('').map(word =>{
-      return word[0].toLocaleUpperCase().concat(word.substring(1))
-    }).join('')
-  }),
+  
+  
 });
 
 const formSchema = z.object({
@@ -32,16 +29,9 @@ const formSchema = z.object({
   .string()    
   .nonempty('O nome não pode ficar em branco!')
   .min(3, "O Nome deverá ter pelo menos 3 letras.")
-  .trim()
-  .transform(name =>{
-    return name.trim().split('').map(word =>{
-      return word[0].toLocaleUpperCase().concat(word.substring(1))
-    }).join('')
-  }),
+  .trim(),
   networkId: z.string().nonempty('Escolha uma rede!'),
 });
-
-
 
 type Cell = z.infer<typeof formSchema>;
 type Network = z.infer<typeof networkSchema>;
@@ -83,13 +73,13 @@ export default function UpdateCellForm({ networks, cell }: ICellForm) {
     try {
       await axios.patch(`api/cells/${cell.id}`, {
         name: data.name,
-        networkId: data.networkId, // Usar data.networkId em vez de Network
+        networkId: data.networkId, 
       });
 
       router.refresh(); // Usar router.replace para evitar histórico duplicado
       setIsOpen(false);
     } catch (error) {
-      console.error('Erro ao atualizar a rede:', error);
+      console.error('Erro ao atualizar a célula:', error);
     }
   };
 
@@ -149,8 +139,6 @@ export default function UpdateCellForm({ networks, cell }: ICellForm) {
               />
               {errors.name && <p className="text-red-500">{errors.name.message}</p>}
             </div>
-            
-
             <div className="modal-action">
               <div
                 onClick={() => {

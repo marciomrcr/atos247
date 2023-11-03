@@ -25,43 +25,43 @@ const getCellById = cache(async (id: string) => {
       network: {
         select: {
           name: true,
-          Supervision: {
-            select: {
-              member: {
+          Membresia: {
+            where: {
+              responsibilityId: "650f54a44231c8aff91620c5"
+            }, select: {
+              person: {
                 select: {
-                  name: true,
+                  name: true
                 }
               }
             }
           }
         }
       },
-      Leadership: {
-        select: {          
-          member: {
+      Membresia: {
+        select: {
+          responsibility: {
             select: {
               name: true
             }
+          },
+          person: {
+            select: {
+              id: true,
+              name: true,
+              email: true
+            }
+          }
+        },
+        
+        orderBy: {
+          person: {
+            name: 'desc'
           }
         }
       },
-      _count: {
-        select: {
-          members: true
-        }
-      },
-      members: {
-        select: {
-          id: true,
-          name: true,
-          email: true
-        },
-        orderBy: {
-          name: 'desc'
-        }
-      },
-      
-    },    
+
+    },
   }
   );
   if (!cell) notFound();
@@ -80,27 +80,24 @@ export async function generateMetadata({
 export default async function CellPage({
   params: { id },
 }: CellPageProps) {
-  const cell = await getCellById(id)
-  
+  const cell = await getCellById(id) 
 
   return (
     <div>
 <div className="">  
         <h1 className="mx-2 font-bold text-base md:text-2xl">Célula {cell.name}</h1>
+        
+        <h3 className="mx-2  text-base">Rede: <span className="font-semibold ">{cell.network.name}</span>
+          </h3>
         <h3 className="mx-2 font-normal text-base">
-          Líder: {!cell.Leadership?.member.name ? "Líder não cadastrado" : cell.Leadership?.member.name }</h3>
-        <h3 className="mx-2 font-normal text-base">
-          Supervisor: {!cell.network.Supervision?.member?.name ? "Supervisor não cadastrado" : cell.network.Supervision?.member?.name}</h3>
-        <h3 className="mx-2 font-normal text-base">
-          Rede {cell.network.name}</h3>
+          Supervisor: <span className="font-semibold ">{cell.network.Membresia.map((item)=> item.person.name)}</span></h3>
 </div>
       <div>
-        {cell.members.length === 0? (
+        {cell.Membresia.length === 0? (
           <div>
           <div className="flex items-center justify-center " > 
           <div className="flex mt-6">
-          <AlertCircleIcon className="" />     
-            
+          <AlertCircleIcon className="" /> 
             <p className='text-red-600 ml-2 text-xl text-center'>Nenhum membro cadastrado.</p> </div>
             
             </div><p className="text-center"> Cadastre os membros da célula 👨‍👩‍👧‍👦 </p></div>
@@ -111,26 +108,23 @@ export default async function CellPage({
               <th className="hidden md:flex">#</th>
                 <th>Nome</th>
                 <th className="hidden md:table-cell">Email</th>                
+                <th>Função</th>                
                 <th className="text-end md:text-center ">Ações</th>
               </tr>
             </thead>
             <tbody>
-              { cell.members.map((item, index)=>(
-                <tr key={item.id}>                 
+              { cell.Membresia.map((item, index)=>(
+                <tr key={item.person.id}>                 
                   <td className="hidden md:flex">{index + 1}</td>              
-                     <td className='w-auto'>{item.name} </td>
-                      <td className='hidden md:table-cell'>{item.email}</td> 
-                  <td className='hidden md:table-cell'>{item.email}</td>
-                 
-                  <td className='flex justify-end md:justify-center space-x-1'><Link href={"/members/" + item.id} className='cursor-pointer hover:text-blue-500 hover:font-semibold underline flex items-center gap-1'>
+                     <td className='w-auto'>{item.person.name} </td>
+                      <td className='hidden md:table-cell'>{item.person.email}</td> 
+                      
+                  <td >{item.responsibility.name}</td>                 
+                  <td className='flex justify-end md:justify-center space-x-1'><Link href={"/members/" + item.person.id} className='cursor-pointer hover:text-blue-500 hover:font-semibold underline flex items-center gap-1'>
                     <View /></Link>
                   </td>
                 </tr>
-
               ))}
-              
-               
-              
             </tbody>
           </table>
         )}

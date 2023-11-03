@@ -5,7 +5,7 @@ import { Edit, Save, XOctagon } from 'lucide-react';
 import { Metadata } from 'next';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
-import { Controller, useForm } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 
 export const metadata: Metadata = {
@@ -23,7 +23,11 @@ const formSchema = z.object({
     .nonempty('O email não pode ficar em branco!')
     .email('Digite um email inválido!')
     .toLowerCase(),
- 
+  birthDay: z.string()
+  .refine((date)=> new Date(date).toString() !== 'Data inválida',{
+    message: 'É necessário um data válida',
+  }).transform((date) => new Date(date))
+  
   
 });
 
@@ -34,13 +38,14 @@ interface IFormProps {
     id: string;
     name: string;
     email: string
+    birthDay: Date
   };
 }
 
 export default function PersonUpdate({ person }: IFormProps) {
   const router = useRouter();
   const { handleSubmit, 
-    control, 
+    register, 
     setValue,
     reset, 
     formState: {errors},
@@ -48,7 +53,8 @@ export default function PersonUpdate({ person }: IFormProps) {
     resolver: zodResolver(formSchema),
     defaultValues: {
       name: person.name,
-      email: person.email
+      email: person.email,
+      birthDay: person.birthDay
     },
   });
   
@@ -59,7 +65,8 @@ export default function PersonUpdate({ person }: IFormProps) {
     try {
       await axios.patch(`api/persons/${person.id}`, {
         name: data.name,
-        email: data.email
+        email: data.email,
+        birthDay: person.birthDay
       });
 
       router.refresh();
@@ -73,6 +80,7 @@ export default function PersonUpdate({ person }: IFormProps) {
   useEffect(() => {
     setValue('name', person.name);
     setValue('email', person.email);
+    setValue('birthDay', person.birthDay);
   }, [person, setValue]);
 
  
@@ -86,40 +94,37 @@ export default function PersonUpdate({ person }: IFormProps) {
 
           <form onSubmit={handleSubmit(onSubmit)}>
             <div className="mb-3 w-full">
-              <Controller
-                name="name"
-                control={control}
-                render={({ field, fieldState }) => (
+              <label htmlFor="name" className='text-slate-300'>Nome</label>              
                   <input
                     type="text"
-                    {...field}
+                    {...register ('name')}
                     autoComplete="off"
-                    className={`input input-bordered ${
-                      fieldState.invalid ? 'input-error' : ''
-                    }`}
-                  />
-                )}
+                    className='input input-bordered'                    
               />
-              {errors.email && <p className="text-red-500">{errors.email.message}</p>}
+              {errors.name && <p className="text-red-500">{errors.name.message}</p>}
             </div>
+
             <div className="mb-3 w-full">
-              <Controller
-                name="email"
-                control={control}
-                render={({ field, fieldState }) => (
+              <label htmlFor="email" className='text-slate-300'>Email</label>              
                   <input
                     type="email"
-                    {...field}
+                    {...register ('email')}
                     autoComplete="off"
-                    className={`input input-bordered ${
-                      fieldState.invalid ? 'input-error' : ''
-                    }`}
-                  />
-                )}
+                    className='input input-bordered'                    
               />
               {errors.email && <p className="text-red-500">{errors.email.message}</p>}
             </div>
 
+            <div className="mb-3 w-full">
+              <label htmlFor="birthDay" className='text-slate-300'>Nascimento</label>              
+                  <input
+                    type="date"
+                    {...register ('birthDay')}
+                    autoComplete="off"
+                    className='input input-bordered'                    
+              />
+              {errors.birthDay && <p className="text-red-500">{errors.birthDay.message}</p>}
+            </div>  
             <div className="modal-action">
               <div onClick={() => setIsOpen(false)}className="cursor-pointer flex items-center">
                 <XOctagon className="text-red-600" />

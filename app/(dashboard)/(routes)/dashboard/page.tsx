@@ -41,7 +41,7 @@ async function getCells() {
   return res;
 }
 async function getMembers() {
-  const res = await prisma.member.count();
+  const res = await prisma.membresia.count();
   return res;
 }
 
