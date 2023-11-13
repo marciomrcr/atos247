@@ -7,7 +7,7 @@ import { ClerkProvider } from "@clerk/nextjs";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Atos 2.47",
+  title: "Ide",
   description: "App de Gestão de Células",
 };
 

@@ -1,5 +1,3 @@
-// "use client";
-
 import { prisma } from "@/libs/prisma";
 import { Cross } from 'lucide-react';
 import Link from "next/link";
@@ -9,7 +7,6 @@ import { Metadata } from "next";
 
 import { CalendarDateRangePicker } from "@/components/ui/date-range-picker";
 import { MainNav } from "@/components/ui/main-nav";
-import { Overview } from "@/components/ui/overview";
 import { RecentSales } from "@/components/ui/recent-sales";
 import {
   Card,
@@ -28,7 +25,7 @@ import {
 
 
 export const metadata: Metadata = {
-  title: "Overview Atos 2.47",
+  title: "Overview Ide",
   description: "Visão geral da gestão de células.",
 }
 
@@ -191,16 +188,8 @@ const LandingPage = async () => {
                 </Card>
               </div>
        
-              <div className="grid gap-4 md:grid-cols-2  ">
-                <Card className=" bg-cyan-950  ">
-                  <CardHeader>
-                    <CardTitle className="text-gray-100">Overview</CardTitle>
-                  </CardHeader>
-                  <CardContent className="pl-2 ">
-                    <div className=''>
-                    <Overview /></div>
-                  </CardContent>
-                </Card>
+              <div className="grid gap-4   ">
+               
                 <Card className=" bg-cyan-950">
                   <CardHeader>
                     <CardTitle className="text-gray-100">Batismo por rede</CardTitle>

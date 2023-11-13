@@ -23,6 +23,12 @@ const routes = [
     
   },
   {
+    label: "Batismo",
+    icon: UserPlus,
+    href: "/batismo",
+    color: "text-sky-500",
+  },  
+  {
     label: "Discípulos",
     icon: UserPlus,
     href: "/members",
@@ -60,8 +66,8 @@ const Sidebar = () => {
           >
             <Image fill alt="Logo" src="/logo.png" />
           </div>
-          <h1 className={cn("text-2xl font-bold", montserrat.className)}>
-            Atos 2.47
+          <h1 className={cn("text-xl font-bold", montserrat.className)}>
+            Rede IDE🚶‍♀️🚶‍♀️
           </h1>
         </Link>
         <div className="space-y-1">

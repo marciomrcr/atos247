@@ -13,14 +13,33 @@ datasource db {
 model Address {
   id          String @id @default(auto()) @map("_id") @db.ObjectId
   personId    String @unique @db.ObjectId
-  zip         String
+  cep         String
   logradouro  String
   numero      String
   complemento String
   bairro      String
   cidade      String
 
-  person Person @relation(fields: [personId], references: [id])
+  person  Person    @relation(fields: [personId], references: [id])
+  Batismo Batismo[]
+}
+
+model Batismo {
+  id       String   @id @default(auto()) @map("_id") @db.ObjectId
+  name     String
+  email    String   @unique
+  phone    String
+  birthDay DateTime
+  batismo  DateTime
+  anjo     String
+
+  Address   Address? @relation(fields: [addressId], references: [id])
+  addressId String?  @db.ObjectId
+
+  cell   Cell   @relation(fields: [cellId], references: [id])
+  cellId String @db.ObjectId
+
+  @@map("batismos")
 }
 
 model Person {
@@ -80,6 +99,7 @@ model Cell {
   createdAt DateTime    @default(now())
   updatedAt DateTime    @updatedAt
   Membresia Membresia[]
+  Batismo   Batismo[]
 
   @@index([name, networkId])
   @@map("celulas")

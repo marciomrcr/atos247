@@ -35,6 +35,12 @@ export function MainNav({
       >
         Membros
       </Link>
+      <Link
+        href="/batismo"
+        className="text-sm font-medium text-gray-200 text-muted-foreground transition-colors hover:text-purple-500"
+      >
+        Batismo
+      </Link>
     </nav>
   )
 }
