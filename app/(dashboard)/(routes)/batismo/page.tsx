@@ -10,7 +10,6 @@ import { AlertCircleIcon, View } from "lucide-react";
 import { getBatismo } from "@/actions/getBatismo";
 import BatismoFormCompleto from './BatismoFormCompleto';
 import DeleteMemberForm from "./DeleteMemberForm";
-import FichaBatismoForm from "./FichaBatismoForm";
 import UpdateMemberForm from "./UpdateMemberForm";
 
 
@@ -49,7 +48,7 @@ async function MemberPage() {
   return (
     <div className="mt-3">
       <div className=" mb-4 px-3">
-        <FichaBatismoForm cells={cells} />
+      
         <BatismoFormCompleto cells={cells} />
       </div>
 
@@ -66,6 +65,7 @@ async function MemberPage() {
                 <th>Célula</th>
                 <th className="hidden md:table-cell">Rede</th>
                 <th className="hidden md:table-cell">Batismo</th>
+                <th className="hidden md:table-cell">Anjo</th>
                 <th className="hidden md:table-cell">Fone</th>
                 <th className="hidden md:table-cell">Email</th>
                 <th className="hidden md:table-cell">Nascimento</th>
@@ -86,15 +86,16 @@ async function MemberPage() {
                     <Link href={"/networks/" + membro.cell.network.id} className='cursor-pointer hover:text-blue-500 hover:font-semibold underline'>
                     {membro.cell.network.name}</Link></td> 
                     <td className='hidden md:table-cell'>{converterData(membro.batismo)}</td>
+                  {/* <td className='hidden md:table-cell'>{membro.anjo}</td> */}
+                    <td className='hidden md:table-cell'>{membro.anjo}</td>
                     <td className='hidden md:table-cell'>{membro.phone}</td>
-                  <td className='hidden md:table-cell'>{membro.email}</td>
+                  <td className='hidden md:table-cell'>{membro.email}</td>                 
                   <td className='hidden md:table-cell'>{converterData(membro.birthDay)}</td>                 
                   <td className='flex justify-center items-center space-x-1'>
                     <DeleteMemberForm id={membro.id} name={membro.name} email={membro.email}  />
                     <UpdateMemberForm  person={membro} />
                     <Link href={"/batismo/" + membro.id} className='cursor-pointer hover:text-blue-500 hover:font-semibold underline flex items-center gap-1'>
-                      <View /></Link>
-                      
+                      <View /></Link>                     
                       
                   </td>
                 </tr>

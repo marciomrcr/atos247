@@ -4,7 +4,7 @@ import { NextResponse } from "next/server";
 
 export const POST = async (request: Request) => {
   const body = await request.json();
-  const { name, email, phone, batismo, birthDay, cellId  } = body;
+  const { name, email, phone, birthDay, sexo, batismo, anjo, cellId, cep, logradouro, numero, complemento, bairro, cidade  } = body;
 
   const personExists = await prisma.batismo.findFirst({
     where: {
@@ -17,8 +17,11 @@ export const POST = async (request: Request) => {
            email: true,
            phone: true,
            birthDay: true,
+           sexo: true,
            batismo: true,
-           cellId
+           anjo: true,
+           cellId: true,
+           cep: true,
     },
   });
 
@@ -36,6 +39,14 @@ export const POST = async (request: Request) => {
       phone,
       birthDay,
       batismo,
+      sexo,
+      anjo,
+      cep,
+      logradouro,
+      numero,
+      complemento,
+      bairro,
+      cidade,
       cellId
     },
   });

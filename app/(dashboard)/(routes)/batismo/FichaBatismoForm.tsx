@@ -49,13 +49,16 @@ const formSchema = z.object({
    .max(11, 'Digite o número do telefone com DDD')
     .nonempty('O telefone não pode ficar em branco!'),
  
-cellId: z.string().nonempty('Escolha uma Célula!'),
-    batismo: z.string().nonempty('Obrigatório informar a data de batismo').pipe(z.coerce.date()),
-  birthDay: z.string().nonempty('Obrigatório informar a data de nascimento').pipe(z.coerce.date())
-  // batismo: z.date({required_error:'Obrigatório informar a data de batismo'}),
-  // birthDay: z.date({required_error:'Obrigatório informar a data de nascimento'}),
-  // address: z
-  // .string().nonempty('Obrigatório')
+  anjo: z.string().nonempty('Informe um anjo'),
+  cellId: z.string().nonempty('Escolha uma Célula!'),
+  batismo: z.string().nonempty('Obrigatório informar a data de batismo').pipe(z.coerce.date()),
+  birthDay: z.string().nonempty('Obrigatório informar a data de nascimento').pipe(z.coerce.date()),
+  cep: z.string().nonempty('Digite um cep válido')
+  .min(8, "Digite um cep com 8 dígitos"),
+  logradouro: z.string().nonempty('Digite um endereço'),
+  complemento: z.string().optional(),
+
+  
 
 });
 
@@ -152,6 +155,23 @@ export default function MemberForm({ cells }: { cells: Cell[] }) {
                 <p className="text-red-500">{errors.batismo.message}</p>
               )}
             </div>
+
+            <div className="mb-0">
+              <label className="text-gray-200 mt-0 mb-0">Anjo</label>
+              <input
+                placeholder="Nome do anjo da guarda"
+                type="text"
+                autoComplete="on"
+                className={`mb-2 w-full input input-bordered ${
+                  errors.anjo ? "input-error" : ""
+                }`}
+                {...register("anjo")}
+              />
+              {errors.anjo && (
+                <p className="text-red-500">{errors.anjo.message}</p>
+              )}
+            </div>
+
             <div className="mb-0">
               <label className="text-gray-200 mt-0 mb-0">Nome do Membro</label>
               <input
@@ -167,6 +187,8 @@ export default function MemberForm({ cells }: { cells: Cell[] }) {
                 <p className="text-red-500">{errors.name.message}</p>
               )}
             </div>
+
+
             <div className="mb-0 mt-0">
               <label className="text-gray-200 mt-0">Email</label>
               <input
@@ -182,6 +204,7 @@ export default function MemberForm({ cells }: { cells: Cell[] }) {
                 <p className="text-red-500">{errors.email.message}</p>
               )}
             </div>
+
             <div>
               <label className="text-gray-200 mt-0">Telefone</label>
               <input
@@ -228,6 +251,22 @@ export default function MemberForm({ cells }: { cells: Cell[] }) {
               </select>
               {errors.cellId && (
                 <p className="text-red-500">{errors.cellId.message}</p>
+              )}
+            </div>
+
+            <div className="mb-0">
+              <label className="text-gray-200 mt-0 mb-0">CEP</label>
+              <input
+                placeholder="CEP"
+                type="text"
+                autoComplete="off"
+                className={`mb-2 w-full input input-bordered ${
+                  errors.cep ? "input-error" : ""
+                }`}
+                {...register("cep")}
+              />
+              {errors.cep && (
+                <p className="text-red-500">{errors.cep.message}</p>
               )}
             </div>
 

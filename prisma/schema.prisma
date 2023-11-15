@@ -10,31 +10,30 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Address {
-  id          String @id @default(auto()) @map("_id") @db.ObjectId
-  personId    String @unique @db.ObjectId
+type Address {
   cep         String
   logradouro  String
   numero      String
   complemento String
   bairro      String
   cidade      String
-
-  person  Person    @relation(fields: [personId], references: [id])
-  Batismo Batismo[]
 }
 
 model Batismo {
-  id       String   @id @default(auto()) @map("_id") @db.ObjectId
-  name     String
-  email    String   @unique
-  phone    String
-  birthDay DateTime
-  batismo  DateTime
-  anjo     String
-
-  Address   Address? @relation(fields: [addressId], references: [id])
-  addressId String?  @db.ObjectId
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  name        String
+  email       String   @unique
+  phone       String
+  birthDay    DateTime
+  sexo        sexo
+  batismo     DateTime
+  anjo        String
+  cep         String
+  logradouro  String
+  numero      String
+  complemento String?
+  bairro      String
+  cidade      String
 
   cell   Cell   @relation(fields: [cellId], references: [id])
   cellId String @db.ObjectId
@@ -51,7 +50,6 @@ model Person {
   origem    Origem      @default(Existente)
   batismo   DateTime?
   Membresia Membresia[]
-  Address   Address?
 
   @@map("pessoas")
 }
@@ -59,6 +57,11 @@ model Person {
 type Phone {
   phone1 String
   phone2 String
+}
+
+enum sexo {
+  Feminino
+  Masculino
 }
 
 enum Origem {
