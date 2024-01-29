@@ -9,6 +9,7 @@ export const getBatismo = async () => {
           phone: true,
           batismo: true,
           birthDay: true,
+          sexo: true,
           anjo: true,
           cellId: true,  
           cell: {

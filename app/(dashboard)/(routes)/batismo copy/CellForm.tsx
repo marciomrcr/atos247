@@ -10,7 +10,6 @@ import * as z from "zod";
 import { Save, XOctagon } from "lucide-react";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { Cell } from "recharts";
 
 export const metadata: Metadata = {
   title: "Células - Atos 2.47",
@@ -19,29 +18,36 @@ export const metadata: Metadata = {
 const networkSchema = z.object({
   id: z.string(),
   name: z
-    .string()
-    .nonempty('O nome não pode ficar em branco!')    
+  .string()    
+  .nonempty('O nome não pode ficar em branco!')
+  .min(3, "O Nome deverá ter pelo menos 3 letras.")
+  .trim()
+  .transform(name =>{
+    return name.trim().split('').map(word =>{
+      return word[0].toLocaleUpperCase().concat(word.substring(1))
+    }).join('')
+  }),
 });
 
 const formSchema = z.object({
   name: z
-    .string()
-    .nonempty('O nome não pode ficar em branco!')
-    .min(3, "O Nome deverá ter pelo menos 3 letras.")
-    .trim()
-    .transform(name => {
-      return name.trim().split(' ').map(word => {
-        return word[0].toLocaleUpperCase().concat(word.substring(1))
-      }).join(' ')
-    }),  
+  .string()    
+  .nonempty('O nome não pode ficar em branco!')
+  .min(3, "O Nome deverá ter pelo menos 3 letras.")
+  .trim()
+  .transform(name =>{
+    return name.trim().split(' ').map(word =>{
+      return word[0].toLocaleUpperCase().concat(word.substring(1))
+    }).join(' ')
+  }),
+    
   networkId: z.string().nonempty('Escolha uma rede!'),
-  
 });
 
 type Cell = z.infer<typeof formSchema>;
 type Network = z.infer<typeof networkSchema>;
 
-export default function CellForm({ networks }: { networks: Network[] }, {cells}: {cells: Cell[]}) {
+export default function CellForm({ networks }: { networks: Network[] }) {
   const {
     handleSubmit,
     register,
@@ -67,7 +73,7 @@ export default function CellForm({ networks }: { networks: Network[] }, {cells}:
   };
 
   const handleSubmitForm = async (data: Cell) => {
-
+   
     setLoading(true);
 
     try {
@@ -101,7 +107,7 @@ export default function CellForm({ networks }: { networks: Network[] }, {cells}:
 
   return (
     <div className="w-full">
-      <button className="btn ml-4" onClick={handleModal}>
+      <button className="btn" onClick={handleModal}>
         Add Célula
       </button>
       <div className={isOpen ? "modal modal-open" : "modal"}>
@@ -111,16 +117,15 @@ export default function CellForm({ networks }: { networks: Network[] }, {cells}:
           </h1>
 
           <form onSubmit={handleSubmit(handleSubmitForm)} className="space-y-8">
-           
-
             <div>
               <label className="text-gray-200 mt-2">Nome da Célula</label>
               <input
                 placeholder="Nome da rede"
                 type="text"
                 autoComplete="off"
-                className={`mb-3 w-full input input-bordered ${errors.name ? "input-error" : ""
-                  }`}
+                className={`mb-3 w-full input input-bordered ${
+                  errors.name ? "input-error" : ""
+                }`}
                 {...register("name", { required: true })}
               />
               {errors.name && (
@@ -129,12 +134,12 @@ export default function CellForm({ networks }: { networks: Network[] }, {cells}:
             </div>
 
             {/* Adicione validação para networkId, se necessário */}
-            
             <div>
               <label className="text-gray-200 mt-2">Escolha uma rede</label>
               <select
-                className={`mb-3 w-full input input-bordered ${errors.networkId ? "input-error" : ""
-                  }`}
+                className={`mb-3 w-full input input-bordered ${
+                  errors.networkId ? "input-error" : ""
+                }`}
                 {...register("networkId", { required: true })}
               >
                 {networks.map((network) => (
@@ -147,7 +152,6 @@ export default function CellForm({ networks }: { networks: Network[] }, {cells}:
                 <p className="text-red-500">{errors.networkId.message}</p>
               )}
             </div>
-            
 
             <div className="modal-action">
               <button

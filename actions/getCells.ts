@@ -7,9 +7,20 @@ export const getCells = async () => {
       name: true,
       networkId: true,
       network: true,
-      
-     
-        
+      celulaMaeId: true,
+      celulasGeradas: {
+        select: {
+          name: true
+        }
+      },
+      celulaMae: {
+        select: {
+          id: true,
+          name: true
+        }
+      },
+
+      multiplicacao: true,
       
     },
     orderBy: { name: "asc" },

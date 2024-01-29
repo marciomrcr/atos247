@@ -20,7 +20,17 @@ const networkSchema = z.object({
   id: z.string(),
   name: z
     .string()
-    .nonempty('O nome não pode ficar em branco!')    
+    .nonempty('O nome não pode ficar em branco!')
+    .min(3, "O Nome deverá ter pelo menos 3 letras.")
+    .trim()
+    .transform(name => {
+      return name.trim().split('').map(word => {
+        return word[0].toLocaleUpperCase().concat(word.substring(1))
+      }).join('')
+    }),
+  
+
+
 });
 
 const formSchema = z.object({
@@ -33,15 +43,16 @@ const formSchema = z.object({
       return name.trim().split(' ').map(word => {
         return word[0].toLocaleUpperCase().concat(word.substring(1))
       }).join(' ')
-    }),  
+    }),
+  multiplicacao: z.boolean(),
   networkId: z.string().nonempty('Escolha uma rede!'),
-  
+  celulaGeradaId: z.string()
 });
 
 type Cell = z.infer<typeof formSchema>;
 type Network = z.infer<typeof networkSchema>;
 
-export default function CellForm({ networks }: { networks: Network[] }, {cells}: {cells: Cell[]}) {
+export default function CellMultiplicationForm({ networks }: { networks: Network[] }, {cells}: {cells: Cell[]}) {
   const {
     handleSubmit,
     register,
@@ -101,17 +112,33 @@ export default function CellForm({ networks }: { networks: Network[] }, {cells}:
 
   return (
     <div className="w-full">
-      <button className="btn ml-4" onClick={handleModal}>
-        Add Célula
+      <button className="btn" onClick={handleModal}>
+        Multiplicar Célula
       </button>
       <div className={isOpen ? "modal modal-open" : "modal"}>
         <div className="modal-box">
           <h1 className="mb-2 text-lg text-center font-bold">
-            Cadastrar nova Célula
+            Cadastrar uma Célula
           </h1>
 
           <form onSubmit={handleSubmit(handleSubmitForm)} className="space-y-8">
+            <div>
            
+              <label className=" flex justify-center items-center space-x-2">
+              <input
+              type="checkbox"
+                id="multiplicacao"
+                
+                className={`block rounded-md  text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600  ${errors.multiplicacao ? "input-error" : ""
+                  }`}
+                {...register("multiplicacao", { required: true })}
+              />
+               <span className="text-gray-500">É uma célula multiplicada?</span>
+              </label>              
+                {errors.multiplicacao && (
+                  <p className="text-red-500">{errors.multiplicacao.message}</p>
+                )}              
+            </div>
 
             <div>
               <label className="text-gray-200 mt-2">Nome da Célula</label>
@@ -147,7 +174,26 @@ export default function CellForm({ networks }: { networks: Network[] }, {cells}:
                 <p className="text-red-500">{errors.networkId.message}</p>
               )}
             </div>
-            
+            <div className="sm:col-span-3">
+                      <label htmlFor="celulaGeradaId" className="block text-sm font-medium leading-6 text-gray-900">
+                        Escolha uma Célula
+                      </label>
+                      <div className="mt-2">
+                        <select
+                          id="celulaGeradaId"
+                          autoComplete="off"
+                          className={`block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6 pl-2 ${errors.celulaGeradaId ? "input-error" : ""
+                            }`}
+                          {...register("celulaGeradaId", { required: true })}
+                        >
+                          {cells?.map((cell) => (
+                            <option key={cell.celulaGeradaId} value={cell.celulaGeradaId}>
+                              {cell.name}
+                            </option>
+                          ))}
+                        </select>
+                      </div>
+                    </div>
 
             <div className="modal-action">
               <button

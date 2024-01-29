@@ -6,8 +6,9 @@ import { getCells } from "@/actions/getCells";
 import { getNetworks } from "@/actions/getNetworks";
 import { AlertCircleIcon, View } from "lucide-react";
 
-import { getMembers } from "@/actions/getMembers";
+import { getNetworkId } from "@/actions/getNetworkId";
 import CellForm from "./CellForm";
+import CellMultiplicationForm from "./CellMultiplicationForm";
 import DeleteCellForm from "./DeleteCellForm";
 import UpdateCellForm from "./UpdateCellForm";
 
@@ -16,14 +17,16 @@ export const metadata: Metadata = {
 };
 
 async function CellPage() {
-  const [members, networks, cells] = await Promise.all( [getMembers(), getNetworks(), getCells()])
+  const [networks, cells, networkId] = await Promise.all( [getNetworks(), getCells(), getNetworkId])
+  
 
 
   return (
     <div className="mt-3">   
-      <div className=" mb-4">
+      <div className="flex justify-center mb-4">
 
         <CellForm networks={networks} />
+        <CellMultiplicationForm networks={networks} />
         {/* <CellMemberForm members={members} networks={networks}/>  */}
       </div>
     
@@ -38,7 +41,8 @@ async function CellPage() {
                      <th className='hidden md:table-cell'>#</th>
                      <th>Célula</th>
                      <th>Rede</th>
-                     <th>Membros</th>
+                     <th className="text-center">Membros</th>
+                     <th>Celula Mãe</th>                     
                      <th className="text-center">Ações</th>
                    </tr>
                  </thead>
@@ -50,7 +54,8 @@ async function CellPage() {
                         <td className='w-auto'>{cell.network.name}</td> 
                         <td className='w-auto'>
                         <Link href={"/cells/" + cell.id} className='cursor-pointer hover:text-blue-500 hover:font-semibold flex items-center justify-center gap-1'>
-                     *1*<View /> </Link></td>
+                     <View /> </Link></td>
+                     <td className='w-auto'>{cell?.celulaMae?.name}</td> 
                         <td className='flex items-center justify-center mx-1'><DeleteCellForm id={cell.id}/>
                           <UpdateCellForm cell={cell}  networks={networks}/> 
                         </td>

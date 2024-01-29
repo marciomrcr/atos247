@@ -1,11 +1,9 @@
-import { getNetworks } from "@/actions/getNetworks";
 import { prisma } from "@/libs/prisma";
 import { AlertCircleIcon, View } from "lucide-react";
 import { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { cache } from "react";
-import CellForm from "./CellForm";
 
 interface NetworkPageProps {
   params: {
@@ -23,8 +21,13 @@ const getCells = cache(async (id: string) => {
       name: true,
       networkId: true,
       network: true,
+      _count: {
+        select: {
+          Membresia: true
+        }
+      }
     },
-    orderBy: { name: "desc" },
+    orderBy: { name: "asc" },
   }
   );
   if (!cell) notFound();
@@ -56,7 +59,7 @@ const getNetworkId = cache(async (id: string) => {
           }
         },
         orderBy: {
-          name: 'asc'
+          name: 'desc'
         }
       }
     },
@@ -79,21 +82,14 @@ export default async function NetworkPage({
 }: NetworkPageProps) {
   const cells = await getCells(id)
   const network = await getNetworkId(id);
-  const networks = await getNetworks();
 
   return (
     <div >
-      
       <h1 className="flex items-center mb-4 mx-4 font-bold text-2xl">Rede de células {network.name}</h1>
             <div>
         {network.cells.length === 0 ? (
           <div className="flex items-center justify-center space-x-2 mt-6" ><AlertCircleIcon />
-            <p className='text-red-600 text-xl text-center'>Nenhuma célula cadastrada. Cadastre a primeira célula 👨‍👩‍👧‍👦 </p>
-            <div className=" mb-4">
-<CellForm networks={networks} />
-{/* <CellMemberForm members={members} networks={networks}/>  */}
-</div>
-            </div>
+            <p className='text-red-600 text-xl text-center'>Nenhuma célula cadastrada. Cadastre a primeira célula 👨‍👩‍👧‍👦 </p></div>
         ) : (
           <table className="table w-full bg-slate-100">
             <thead>

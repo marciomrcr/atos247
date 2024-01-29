@@ -1,5 +1,20 @@
 "use client"
 
+/*
+  This example requires some changes to your config:
+  
+  ```
+  // tailwind.config.js
+  module.exports = {
+    // ...
+    plugins: [
+      // ...
+      require('@tailwindcss/forms'),
+    ],
+  }
+  ```
+*/
+
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 

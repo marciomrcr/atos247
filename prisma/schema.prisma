@@ -10,6 +10,43 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum Chassi {
+  Laptop
+  Desktop
+}
+
+enum Refresh {
+  Sim
+  Nao
+}
+
+enum Share {
+  Sim
+  Nao
+}
+
+enum Analyst {
+  Euclides
+  Marcio
+  Rodrigo
+  Vinicius
+}
+
+model Migrate {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  user        String
+  serie       String   @unique
+  chassi      Chassi
+  model       String
+  refresh     Refresh
+  share       Share
+  observation String?
+  analyst     Analyst
+  migrateDate DateTime
+
+  @@map("migrations")
+}
+
 type Address {
   cep         String
   logradouro  String
@@ -87,15 +124,24 @@ model Network {
   @@map("redes")
 }
 
+// model User {
+//   id          String  @id @default(auto()) @map("_id") @db.ObjectId
+//   name        String?
+//   successorId String? @unique @db.ObjectId
+//   successor   User?   @relation("BlogOwnerHistory", fields: [successorId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+//   predecessor User?   @relation("BlogOwnerHistory")
+// }
+
 model Cell {
   id        String @id @default(auto()) @map("_id") @db.ObjectId
   name      String
   networkId String @db.ObjectId
 
-  multiplicacao    Boolean @default(false)
-  celulaDeOrigemId String? @db.ObjectId
-
-  active Boolean @default(true)
+  multiplicacao  Boolean @default(false)
+  celulaMaeId    String? @db.ObjectId
+  celulaMae      Cell?   @relation("CellHistoric", fields: [celulaMaeId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  celulasGeradas Cell[]  @relation("CellHistoric")
+  active         Boolean @default(true)
 
   network Network @relation(fields: [networkId], references: [id])
 
@@ -129,5 +175,37 @@ model Membresia {
   network        Network?       @relation(fields: [networkId], references: [id])
 
   @@index([personId, responsibilityId])
-  @@map("membros")
+  @@map("membresia")
 }
+
+model Cargo {
+  id        String      @id @default(auto()) @map("_id") @db.ObjectId
+  title     String      @unique
+  Discipulo Discipulo[]
+  //HistoricoCargo HistoricoCargo[]
+
+  @@map("cargos")
+}
+
+model Discipulo {
+  id      String  @id @default(auto()) @map("_id") @db.ObjectId
+  name    String  @unique
+  cargoId String? @db.ObjectId
+
+  //historicoCargo HistoricoCargo[]
+  Cargo Cargo? @relation(fields: [cargoId], references: [id])
+
+  @@map("discipulos")
+}
+
+// model HistoricoCargo {
+//   id        String    @id @default(auto()) @map("_id") @db.ObjectId
+//   cargoId   String    @db.ObjectId
+//   membroId  String    @db.ObjectId
+//   startDate DateTime  @default(now())
+//   endDate   DateTime?
+
+//   cargo  Cargo     @relation(fields: [cargoId], references: [id])
+//   membro Discipulo @relation(fields: [membroId], references: [id])
+
+//   @@map("historicoCargos")}

@@ -9,17 +9,20 @@ export const POST = async(request: Request) =>{
   const cellExists = await prisma.cell.findFirst({
     where: {
       name,
-      networkId
+      networkId,
+      
+
     },
     select: {
       id: true,
-      name: true
+      name: true,
+      networkId: true
     }
   })
 
   if (cellExists) {
     return NextResponse.json({
-      message: `${cellExists.name} já foi cadastrado anteriormente como ${cellExists.id} `,
+      message: `A ${cellExists.name} já exite: ${cellExists.id}`,
       status: 409,
     });
   }
@@ -29,7 +32,9 @@ export const POST = async(request: Request) =>{
   const cell = await prisma.cell.create({
     data: {
       name: body.name,
-      networkId: body.networkId
+      networkId: body.networkId,
+      multiplicacao: body.multiplicacao,
+      celulaMaeId: body.celulaMaeId
 
     }
   })
