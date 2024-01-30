@@ -19,9 +19,14 @@ export const getCells = async () => {
           name: true
         }
       },
+      _count: {
+        select: {
+          discipulos: true
+        }
+      },
 
       multiplicacao: true,
-      
+            
     },
     orderBy: { name: "asc" },
   });

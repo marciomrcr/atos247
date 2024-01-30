@@ -1,21 +1,21 @@
 import { prisma } from "@/libs/prisma";
 
-export const getMemberById = async (id: string) => {
-  const res = await prisma.person.findUnique({
+export const getMembroById = async (id: string) => {
+  const res = await prisma.discipulo.findUnique({
     where: {
       id
     },
     select: {
       id: true,
       name: true,
-      email: true,
+      phone: true,
     }
 
     
   });
   return res;
 };
-export const countMembers = async () => {
+export const countMembros = async () => {
   const totalMembers = await prisma.person.count();
   console.log(totalMembers);
   return totalMembers;

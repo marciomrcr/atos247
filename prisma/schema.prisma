@@ -78,19 +78,6 @@ model Batismo {
   @@map("batismos")
 }
 
-model Person {
-  id        String      @id @default(auto()) @map("_id") @db.ObjectId
-  name      String
-  email     String      @unique
-  phone     Int
-  birthDay  DateTime
-  origem    Origem      @default(Existente)
-  batismo   DateTime?
-  Membresia Membresia[]
-
-  @@map("pessoas")
-}
-
 type Phone {
   phone1 String
   phone2 String
@@ -118,8 +105,7 @@ model Network {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  cells     Cell[]
-  Membresia Membresia[]
+  cells Cell[]
 
   @@map("redes")
 }
@@ -145,67 +131,50 @@ model Cell {
 
   network Network @relation(fields: [networkId], references: [id])
 
-  createdAt DateTime    @default(now())
-  updatedAt DateTime    @updatedAt
-  Membresia Membresia[]
-  Batismo   Batismo[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  Batismo    Batismo[]
+  discipulos Discipulo[]
 
   @@index([name, networkId])
   @@map("celulas")
 }
 
-model Responsibility {
-  id        String      @id @default(auto()) @map("_id") @db.ObjectId
-  name      String      @unique
-  membresia Membresia[]
-
-  @@map("Responsibilitys")
-}
-
-model Membresia {
-  id               String  @id @default(auto()) @map("_id") @db.ObjectId
-  personId         String  @db.ObjectId
-  responsibilityId String  @db.ObjectId
-  cellId           String? @db.ObjectId
-  networkId        String? @db.ObjectId
-
-  person         Person         @relation(fields: [personId], references: [id])
-  responsibility Responsibility @relation(fields: [responsibilityId], references: [id])
-  cell           Cell?          @relation(fields: [cellId], references: [id])
-  network        Network?       @relation(fields: [networkId], references: [id])
-
-  @@index([personId, responsibilityId])
-  @@map("membresia")
-}
-
 model Cargo {
-  id        String      @id @default(auto()) @map("_id") @db.ObjectId
-  title     String      @unique
-  Discipulo Discipulo[]
-  //HistoricoCargo HistoricoCargo[]
+  id    String @id @default(auto()) @map("_id") @db.ObjectId
+  title String @unique
+
+  Discipulo      Discipulo[]
+  historicoCargo HistoricoCargo[]
 
   @@map("cargos")
 }
 
 model Discipulo {
-  id      String  @id @default(auto()) @map("_id") @db.ObjectId
-  name    String  @unique
-  cargoId String? @db.ObjectId
+  id    String   @id @default(auto()) @map("_id") @db.ObjectId
+  name  String   @unique
+  phone String
+  birth DateTime
 
-  //historicoCargo HistoricoCargo[]
-  Cargo Cargo? @relation(fields: [cargoId], references: [id])
+  historicoCargo HistoricoCargo[]
+  Cargo          Cargo?           @relation(fields: [cargoId], references: [id])
+  cargoId        String?          @db.ObjectId
+  cell           Cell             @relation(fields: [cellId], references: [id])
+  cellId         String           @db.ObjectId
 
   @@map("discipulos")
 }
 
-// model HistoricoCargo {
-//   id        String    @id @default(auto()) @map("_id") @db.ObjectId
-//   cargoId   String    @db.ObjectId
-//   membroId  String    @db.ObjectId
-//   startDate DateTime  @default(now())
-//   endDate   DateTime?
+model HistoricoCargo {
+  id        String    @id @default(auto()) @map("_id") @db.ObjectId
+  cargoId   String    @db.ObjectId
+  membroId  String    @db.ObjectId
+  startDate DateTime  @default(now())
+  endDate   DateTime?
 
-//   cargo  Cargo     @relation(fields: [cargoId], references: [id])
-//   membro Discipulo @relation(fields: [membroId], references: [id])
+  cargo  Cargo     @relation(fields: [cargoId], references: [id])
+  membro Discipulo @relation(fields: [membroId], references: [id])
 
-//   @@map("historicoCargos")}
+  @@map("historicoCargos")
+}

@@ -5,10 +5,16 @@ export async function getCargos() {
     
     select: {
       id: true,
-      title: true,
+      title: true,      
+      Discipulo: {
+        select: {
+          id: true,
+          name: true
+      }
+    },
       _count: {
         select: {
-          Membro: true,
+          Discipulo: true,
         },
       },
       },

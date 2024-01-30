@@ -29,7 +29,10 @@ export const POST = async(request: Request) =>{
   const discipulo = await prisma.discipulo.create({
     data: {
       name: body.name,
-     
+      birth: body.birth,
+      phone: body.phone,
+      cellId: body.cellId,
+      cargoId: body.cargoId,
     }
   })
   return NextResponse.json(discipulo,{status: 201})

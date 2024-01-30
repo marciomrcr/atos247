@@ -2,40 +2,41 @@ import { prisma } from "@/libs/prisma";
 
 export async function getNetworks() {
   const res = await prisma.network.findMany({
-    
+
     select: {
+
       id: true,
       name: true,
-      Membresia: {
-        where: {
-          responsibilityId: "650f54b34231c8aff91620c6",
-          
-        }, select: {
-          person: {
-            select: {
-              name: true
-            }
-          }
-        },              
-      },
-
       _count: {
         select: {
           cells: true,
+
         },
       },
+
       cells: {
-        select: {   
+        
+        select: {
           name: true,
+          discipulos: {
+            where: {
+              Cargo: {
+                title: "Pastor"
+              }
+            }
+
+          },
+
           _count: {
             select: {
-              Membresia: true,
-            },
-          },
+              discipulos: true
+            }
+          }
+
         },
-               orderBy: {
+        orderBy: {
           name: "asc",
-        }, 
+        },
       },
 
     },

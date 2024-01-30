@@ -45,7 +45,7 @@ async function NetworkPage() {
                 <th>Nome</th>
                 <th>Células</th>
                 <th>Membros</th>
-                <th>Pr. rede</th>
+                
                 
                 <th className="text-center">Ações</th>
               </tr>
@@ -55,7 +55,7 @@ async function NetworkPage() {
               {networks?.map((network, index) => {
                 // Calcula o total de membros
                 const totalMembers = network.cells.reduce(
-                  (total, item) => total + item._count.Membresia,
+                  (total, item) => total + item._count.discipulos,
                   0
                 );
                 return (
@@ -67,7 +67,7 @@ async function NetworkPage() {
                     {network._count.cells} <View/> </Link>
                     </td>
                     <td className="w-1/6">{totalMembers}</td>
-                    <td className="w-auto">{network.Membresia.map((item)=> item.person.name)}</td>
+                   
                     
                     <td className="flex justify-center space-x-1">  
                       <NetworkDelete id={network.id} />

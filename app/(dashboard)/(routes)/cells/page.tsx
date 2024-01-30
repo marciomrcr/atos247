@@ -54,6 +54,7 @@ async function CellPage() {
                         <td className='w-auto'>{cell.network.name}</td> 
                         <td className='w-auto'>
                         <Link href={"/cells/" + cell.id} className='cursor-pointer hover:text-blue-500 hover:font-semibold flex items-center justify-center gap-1'>
+                        {cell._count.discipulos}
                      <View /> </Link></td>
                      <td className='w-auto'>{cell?.celulaMae?.name}</td> 
                         <td className='flex items-center justify-center mx-1'><DeleteCellForm id={cell.id}/>

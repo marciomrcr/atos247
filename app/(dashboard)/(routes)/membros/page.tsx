@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 
+import { getCargos } from "@/actions/getCargos";
+import { getCells } from "@/actions/getCells";
 import { getMembros } from "@/actions/getMembros";
 import { AlertCircleIcon } from "lucide-react";
 import MembroDelete from "./MembroDelete";
@@ -12,10 +14,26 @@ export const metadata: Metadata = {
   title: "Athos 2-47",
 };
 
+function converterDate(date: Date) {
+  // Converte a data para um objeto Date
+  const dataObj = new Date(date);
+
+  // Obtém os valores do dia, mês e ano
+  const dia = dataObj.getUTCDate();
+  const mes = dataObj.getMonth() + 1;
+  const ano = dataObj.getFullYear();
+
+  // Formata a data no formato dd/mm/aa
+  const dataFormatada = `${dia}/${mes}/${ano}`;
+
+  // Retorna a data formatada
+  return dataFormatada;
+}
+
 
 async function MembrosPage() {
-  const membros = await getMembros();
-  console.log(membros)
+  const [cells, cargos, membros] = await Promise.all( [getCells(), getCargos(), getMembros()])
+  
 
 
   return (
@@ -25,7 +43,7 @@ async function MembrosPage() {
       <h1 className=" mx-4 font-bold text-2xl">
           Cargos Cadastrados
         </h1>
-        <NetworkForm />
+        <NetworkForm cells={cells} cargos={cargos}/>
         {/* <CellForm membros={membros}/> */}
       </div>
     
@@ -38,7 +56,11 @@ async function MembrosPage() {
             <thead>
               <tr>
                 <th className="hidden md:flex">#</th>
+                <th>Nome</th> 
+                <th>Célula</th> 
                 <th>Cargo</th> 
+                <th>Telefone</th> 
+                <th>Nascimento</th> 
                 <th className="text-center">Ações</th>
               </tr>
             </thead>
@@ -51,6 +73,10 @@ async function MembrosPage() {
                   <tr key={membro.id}>
                     <td className="hidden md:flex">{index + 1}</td>
                     <td className="w-auto">{membro.name}</td>
+                    <td className="w-auto">{membro.cell.name}</td>
+                    <td className="w-auto">{membro.Cargo?.title}</td>
+                    <td className="w-auto">{membro.phone}</td>
+                    <td className="w-auto">{converterDate(membro.birth)}</td>
                     <td className="flex justify-center space-x-1">  
                       <MembroDelete id={membro.id} />
                       <MembroUpdate membro={membro}  /> 

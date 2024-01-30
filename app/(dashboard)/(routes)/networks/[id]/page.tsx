@@ -41,14 +41,14 @@ const getNetworkId = cache(async (id: string) => {
           name: true,
           _count: {
             select: {
-              Membresia: true
+              discipulos: true
             }
           },
-          Membresia: {
+          discipulos: {
             select: {
-              responsibility: {
+              Cargo: {
                 select: {
-                  name: true,
+                  title: true,
                   
                 }
               }
@@ -111,7 +111,7 @@ export default async function NetworkPage({
                   <td className='hidden md:flex '>{index + 1}</td>
                   <td className='w-1/3'>{cell.name}</td>               
                   <td className='w-auto text-center'>
-                    {cell._count.Membresia}</td>
+                    {cell._count.discipulos}<View /></td>
                   <td className='flex justify-center space-x-1'>
                     <Link href={"/cells/" + cell.id} className='cursor-pointer hover:text-blue-500 hover:font-semibold underline flex items-center gap-1'>
                     <View /></Link>
