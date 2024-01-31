@@ -47,9 +47,9 @@ const routes = [
     color: "text-sky-500",
   },
   {
-    label: "Usuários",
+    label: "Discípulos",
     icon: User,
-    href: "/users",
+    href: "/membros",
     color: "text-sky-500",
   }
 ];

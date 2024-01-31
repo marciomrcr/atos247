@@ -15,10 +15,25 @@ export const metadata: Metadata = {
 
 const formSchema = z.object({
   name: z
-  .string()    
-  .nonempty('O nome não pode ficar em branco!')
-  .min(3, "O Nome deverá ter pelo menos 3 letras.")
-  .trim(),
+    .string()
+    .nonempty('O nome é obrigatório!')
+    .min(3, "O Nome deverá ter pelo menos 3 letras.")
+    .trim()
+    .transform(name => {
+      return name.trim().split(' ').map(word => {
+        return word[0].toLocaleUpperCase().concat(word.substring(1))
+      }).join(' ')
+    }),
+   phone: z
+    .string()
+    .trim()
+    .min(9, 'Digite o número do telefone')
+    .max(9, 'tem muito numero')
+    .nonempty('Digite um telefone válido!'),
+  // cargoId: z.string().optional(),
+  // cellId: z.string().nonempty('Informe uma célula!'),
+  // birth: z.string().nonempty('Informe a data de nascimento').pipe(z.coerce.date())
+  
  
 });
 
@@ -28,6 +43,10 @@ interface IMembroForm{
   membro: {
     id: string,
     name: string,    
+    phone: string,    
+    // cellId: string,    
+    // cargoId: string,    
+    // birth: Date,    
   }
 }
 
@@ -43,6 +62,10 @@ export default function MembroUpdate({membro}: IMembroForm) {
     resolver: zodResolver(formSchema),
     defaultValues: {
       name: membro.name,
+      phone: membro.phone,
+      // birth: membro.birth,
+      // cargoId: membro.cargoId,
+      // cellId: membro.cellId,
       
     },
   });
@@ -55,6 +78,7 @@ export default function MembroUpdate({membro}: IMembroForm) {
     try {
       await axios.patch(`api/membro/${membro.id}`, {
         name: data.name,
+        phone: data.phone,
         
       });
 
@@ -68,6 +92,7 @@ export default function MembroUpdate({membro}: IMembroForm) {
 
   useEffect(() => {
     setValue('name', membro.name);    
+    setValue('phone', membro.phone);    
   }, [membro, setValue]);
 
   return (
@@ -93,9 +118,25 @@ export default function MembroUpdate({membro}: IMembroForm) {
                     }`}
                   />
                 )}
-              />
-               
+              />               
               {errors.name && <p className="text-red-500">{errors.name.message}</p>}
+            </div>
+            <div className="mb-3 w-full">
+              <Controller
+                name="phone"
+                control={control}
+                render={({ field, fieldState }) => (
+                  <input
+                    type="text"
+                    {...field}
+                    autoComplete="off"
+                    className={`input input-bordered ${
+                      fieldState.invalid ? 'input-error' : ''
+                    }`}
+                  />
+                )}
+              />               
+              {errors.phone && <p className="text-red-500">{errors.phone.message}</p>}
             </div>
             <div className="modal-action">
               <div

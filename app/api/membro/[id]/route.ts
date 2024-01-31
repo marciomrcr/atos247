@@ -1,5 +1,5 @@
 import { prisma } from "@/libs/prisma";
-import type { Cell } from '@prisma/client';
+import type { Discipulo } from '@prisma/client';
 import { NextResponse } from "next/server";
 
 export const DELETE = async(request: Request, {params}:{params: {id: string}}) =>{
@@ -22,13 +22,13 @@ export const DELETE = async(request: Request, {params}:{params: {id: string}}) =
 }
 
 export const PATCH = async(request: Request, {params}:{params: {id: string}}) =>{
-  const body: Cell = await request.json()
-  const getCell = await prisma.discipulo.findUnique({
+  const body: Discipulo = await request.json()
+  const getMembro = await prisma.discipulo.findUnique({
     where: {
       id: params.id,      
     }
   })
-  if(!getCell){
+  if(!getMembro){
     return "Membro não encontrado"
   }
 
@@ -38,6 +38,7 @@ export const PATCH = async(request: Request, {params}:{params: {id: string}}) =>
     },
     data: {
       name: body.name,
+      phone: body.phone
       
       
     }   

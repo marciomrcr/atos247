@@ -49,8 +49,8 @@ const formSchema = z.object({
    phone: z
     .string()
     .trim()
-    .min(11, 'Digite o número do telefone com DDD')
-    .max(11, 'Digite o número do telefone com DDD')
+    .min(9, 'Digite o número do telefone')
+    .max(9, 'tem muito numero')
     .nonempty('Digite um telefone válido!'),
   cargoId: z.string().optional(),
   cellId: z.string().nonempty('Informe uma célula!'),
