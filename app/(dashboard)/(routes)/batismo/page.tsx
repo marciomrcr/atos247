@@ -2,7 +2,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 
-import { format } from 'date-fns';
 
 import { getCells } from "@/actions/getCells";
 import { AlertCircleIcon, View } from "lucide-react";
@@ -20,14 +19,7 @@ export const metadata: Metadata = {
 async function MemberPage() {
   const [batismo, cells] = await Promise.all([getBatismo(), getCells()])
 
-  const formatDate = (dateString: Date) => {
-    const date = new Date(dateString);
-    if (!isNaN(date.getTime())) {
-      return format(date, 'dd/MM/yy');
-    } else {
-      return 'Data inválida';
-    }
-  };
+  
 
   function converterData(date: Date) {
     // Converte a data para um objeto Date

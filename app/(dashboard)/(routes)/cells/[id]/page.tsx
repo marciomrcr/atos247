@@ -24,26 +24,23 @@ const getCellById = cache(async (id: string) => {
       networkId: true,
       network: {
         select: {
+          id: true,
           name: true
         }
       },
       discipulos: {
         select: {
-          cell: {
+          id: true,
+          name: true,
+          birth: true,
+          phone: true,
+          cargo: {
             select: {
-              id: true,
-              name: true,
-
+              title: true
             }
-            
           }
         }
-       
-
       },
-            
-      
-
     },
   }
   );
@@ -60,6 +57,22 @@ export async function generateMetadata({
   };
 }
 
+function converterData(date: Date) {
+  // Converte a data para um objeto Date
+  const dataObj = new Date(date);
+
+  // Obtém os valores do dia, mês e ano
+  const dia = dataObj.getUTCDate();
+  const mes = dataObj.getMonth() + 1;
+  const ano = dataObj.getFullYear();
+
+  // Formata a data no formato dd/mm/aa
+  const dataFormatada = `${dia}/${mes}/${ano}`;
+
+  // Retorna a data formatada
+  return dataFormatada;
+}
+
 export default async function CellPage({
   params: { id },
 }: CellPageProps) {
@@ -68,12 +81,12 @@ export default async function CellPage({
   return (
     <div>
 <div className="">  
-        <h1 className="mx-2 font-bold text-base md:text-2xl">Célula {cell.name}</h1>
+        <h3 className="mx-2 font-bold text-base md:text-2xl">Célula {cell.name}</h3>
         
         <h3 className="mx-2  text-base">Rede: <span className="font-semibold ">{cell.network.name}</span>
           </h3>
         <h3 className="mx-2 font-normal text-base">
-          Supervisor: <span className="font-semibold ">{cell.network.name}</span></h3>
+          Supervisor: <span className="font-semibold "></span></h3>
 </div>
       <div>
         {cell.discipulos.length === 0? (
@@ -90,20 +103,22 @@ export default async function CellPage({
               <tr>  
               <th className="hidden md:flex">#</th>
                 <th>Nome</th>
-                <th className="hidden md:table-cell">Email</th>                
                 <th>Função</th>                
+                <th className="hidden md:table-cell">Telefone</th>                
+                <th className="hidden md:table-cell">Nascimento</th>                
                 <th className="text-end md:text-center ">Ações</th>
               </tr>
             </thead>
             <tbody>
               { cell.discipulos.map((item, index)=>(
-                <tr key={item.cell.id}>                 
+                <tr key={item.id}>                 
                   <td className="hidden md:flex">{index + 1}</td>              
-                     <td className='w-auto'>{item.cell.name} </td>
-                      <td className='hidden md:table-cell'>{item.cell.name}</td> 
+                     <td className='w-auto'>{item.name} </td>
+                      <td className='hidden md:table-cell'>{item.cargo.title}</td> 
                       
-                  <td >{item.cell.name}</td>                 
-                  <td className='flex justify-end md:justify-center space-x-1'><Link href={"/members/" + item.cell.name} className='cursor-pointer hover:text-blue-500 hover:font-semibold underline flex items-center gap-1'>
+                  <td >{item.phone}</td>                 
+                  <td >{converterData(item.birth)}</td>                 
+                  <td className='flex justify-end md:justify-center space-x-1'><Link href={"/membros/" + item.id} className='cursor-pointer hover:text-blue-500 hover:font-semibold underline flex items-center gap-1'>
                     <View /></Link>
                   </td>
                 </tr>

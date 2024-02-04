@@ -28,12 +28,7 @@ const routes = [
     href: "/batismo",
     color: "text-sky-500",
   },  
-  {
-    label: "Discípulos",
-    icon: UserPlus,
-    href: "/members",
-    color: "text-sky-500",
-  },
+  
   {
     label: "Células",
     icon: Users,
@@ -43,13 +38,38 @@ const routes = [
   {
     label: "Redes",
     icon: Network,
-    href: "/networks",
+    href: "/redes",
+    color: "text-sky-500",
+  },
+  {
+    label: "Redes Gerais",
+    icon: Network,
+    href: "/redesGerais",
     color: "text-sky-500",
   },
   {
     label: "Discípulos",
     icon: User,
     href: "/membros",
+    color: "text-sky-500",
+  },
+  {
+    label: "Lideres",
+    icon: User,
+    href: "/lideres",
+    color: "text-sky-500",
+  },
+  {
+    label: "Supervisores",
+    icon: User,
+    href: "/supervisores",
+    color: "text-sky-500",
+  },
+  
+  {
+    label: "Pastores",
+    icon: User,
+    href: "/pastores",
     color: "text-sky-500",
   }
 ];
@@ -67,7 +87,7 @@ const Sidebar = () => {
             <Image fill alt="Logo" src="/logo.png" />
           </div>
           <h1 className={cn("text-xl font-bold", montserrat.className)}>
-            Rede IDE🚶‍♀️🚶‍♀️
+            Rede IDE III🚶‍♀️🚶‍♀️
           </h1>
         </Link>
         <div className="space-y-1">

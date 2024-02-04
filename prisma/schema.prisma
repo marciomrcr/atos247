@@ -10,50 +10,18 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-enum Chassi {
-  Laptop
-  Desktop
-}
+// type Address {
+//   cep         String
+//   logradouro  String
+//   numero      String
+//   complemento String
+//   bairro      String
+//   cidade      String
+// }
 
-enum Refresh {
-  Sim
-  Nao
-}
-
-enum Share {
-  Sim
-  Nao
-}
-
-enum Analyst {
-  Euclides
-  Marcio
-  Rodrigo
-  Vinicius
-}
-
-model Migrate {
-  id          String   @id @default(auto()) @map("_id") @db.ObjectId
-  user        String
-  serie       String   @unique
-  chassi      Chassi
-  model       String
-  refresh     Refresh
-  share       Share
-  observation String?
-  analyst     Analyst
-  migrateDate DateTime
-
-  @@map("migrations")
-}
-
-type Address {
-  cep         String
-  logradouro  String
-  numero      String
-  complemento String
-  bairro      String
-  cidade      String
+enum sexo {
+  Feminino
+  Masculino
 }
 
 model Batismo {
@@ -78,45 +46,41 @@ model Batismo {
   @@map("batismos")
 }
 
-type Phone {
-  phone1 String
-  phone2 String
-}
-
-enum sexo {
-  Feminino
-  Masculino
-}
-
 enum Origem {
   Outra_igreja
   Batismo
   Existente
 }
 
-model Network {
-  id   String @id @default(auto()) @map("_id") @db.ObjectId
-  name String @unique
+model NetworkMother {
+  id     String  @id @default(auto()) @map("_id") @db.ObjectId
+  name   String  @unique
+  active Boolean @default(true)
 
-  active        Boolean @default(true)
-  multiplicacao Boolean @default(false)
-  redeOrigemId  String? @db.ObjectId
+  createdAt       DateTime          @default(now())
+  updatedAt       DateTime          @updatedAt
+  HistoricoPrRede HistoricoPrRede[]
+  Network         Network[]
+
+  @@map("rede_mae")
+}
+
+model Network {
+  id        String  @id @default(auto()) @map("_id") @db.ObjectId
+  redeMaeId String? @db.ObjectId
+  name      String  @unique
+
+  active Boolean @default(true)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  cells Cell[]
+  cells               Cell[]
+  historicoSupervisor HistoricoSupervisor[]
+  redeMae             NetworkMother?        @relation(fields: [redeMaeId], references: [id])
 
   @@map("redes")
 }
-
-// model User {
-//   id          String  @id @default(auto()) @map("_id") @db.ObjectId
-//   name        String?
-//   successorId String? @unique @db.ObjectId
-//   successor   User?   @relation("BlogOwnerHistory", fields: [successorId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-//   predecessor User?   @relation("BlogOwnerHistory")
-// }
 
 model Cell {
   id        String @id @default(auto()) @map("_id") @db.ObjectId
@@ -134,47 +98,108 @@ model Cell {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  Batismo    Batismo[]
-  discipulos Discipulo[]
+  Batismo         Batismo[]
+  discipulos      Discipulo[]
+  HistoricoLider  HistoricoLider[]
+  HistoricoMembro HistoricoMembro[]
 
   @@index([name, networkId])
   @@map("celulas")
 }
 
 model Cargo {
-  id    String @id @default(auto()) @map("_id") @db.ObjectId
-  title String @unique
-
-  Discipulo      Discipulo[]
-  historicoCargo HistoricoCargo[]
+  id                  String                @id @default(auto()) @map("_id") @db.ObjectId
+  title               String                @unique
+  HistoricoMembro     HistoricoMembro[]
+  Discipulo           Discipulo[]
+  HistoricoLider      HistoricoLider[]
+  historicoSupervisor HistoricoSupervisor[]
+  HistoricoPrRede     HistoricoPrRede[]
 
   @@map("cargos")
 }
 
 model Discipulo {
-  id    String   @id @default(auto()) @map("_id") @db.ObjectId
-  name  String   @unique
-  phone String
-  birth DateTime
+  id      String   @id @default(auto()) @map("_id") @db.ObjectId
+  name    String   @unique
+  birth   DateTime
+  phone   String
+  cellId  String   @db.ObjectId
+  cargoId String   @db.ObjectId
 
-  historicoCargo HistoricoCargo[]
-  Cargo          Cargo?           @relation(fields: [cargoId], references: [id])
-  cargoId        String?          @db.ObjectId
-  cell           Cell             @relation(fields: [cellId], references: [id])
-  cellId         String           @db.ObjectId
+  cell                Cell                  @relation(fields: [cellId], references: [id])
+  cargo               Cargo                 @relation(fields: [cargoId], references: [id])
+  historicoMembro     HistoricoMembro[]
+  HistoricoLider      HistoricoLider[]
+  historicoSupervisor HistoricoSupervisor[]
+  HistoricoPrRede     HistoricoPrRede[]
 
   @@map("discipulos")
 }
 
-model HistoricoCargo {
+model HistoricoMembro {
   id        String    @id @default(auto()) @map("_id") @db.ObjectId
+  cellId    String    @db.ObjectId
+  cargoId   String    @db.ObjectId
+  membroId  String    @db.ObjectId
+  startDate DateTime  @default(now())
+  endDate   DateTime?
+  cell      Cell      @relation(fields: [cellId], references: [id])
+  cargo     Cargo     @relation(fields: [cargoId], references: [id])
+  membro    Discipulo @relation(fields: [membroId], references: [id])
+
+  @@map("historicoMembro")
+}
+
+model HistoricoLider {
+  id        String    @id @default(auto()) @map("_id") @db.ObjectId
+  cellId    String    @db.ObjectId
   cargoId   String    @db.ObjectId
   membroId  String    @db.ObjectId
   startDate DateTime  @default(now())
   endDate   DateTime?
 
+  cell   Cell      @relation(fields: [cellId], references: [id])
   cargo  Cargo     @relation(fields: [cargoId], references: [id])
   membro Discipulo @relation(fields: [membroId], references: [id])
 
-  @@map("historicoCargos")
+  @@map("HistoricoLider")
 }
+
+model HistoricoSupervisor {
+  id        String    @id @default(auto()) @map("_id") @db.ObjectId
+  redeId    String    @db.ObjectId
+  cargoId   String    @db.ObjectId
+  membroId  String    @db.ObjectId
+  startDate DateTime  @default(now())
+  endDate   DateTime?
+
+  rede   Network   @relation(fields: [redeId], references: [id])
+  cargo  Cargo     @relation(fields: [cargoId], references: [id])
+  membro Discipulo @relation(fields: [membroId], references: [id])
+
+  @@map("historicoSupervisor")
+}
+
+model HistoricoPrRede {
+  id        String    @id @default(auto()) @map("_id") @db.ObjectId
+  redeMaeId String    @db.ObjectId
+  cargoId   String    @db.ObjectId
+  membroId  String    @db.ObjectId
+  startDate DateTime  @default(now())
+  endDate   DateTime?
+
+  rede   NetworkMother @relation(fields: [redeMaeId], references: [id])
+  cargo  Cargo         @relation(fields: [cargoId], references: [id])
+  membro Discipulo     @relation(fields: [membroId], references: [id])
+
+  @@map("historicoPrRede")
+}
+
+// model User {
+//   id          String  @id @default(auto()) @map("_id") @db.ObjectId
+//   name        String?
+//   successorId String? @unique @db.ObjectId
+//   successor   User?   @relation("BlogOwnerHistory", fields: [successorId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+//   predecessor User?   @relation("BlogOwnerHistory")
+// }

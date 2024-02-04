@@ -116,7 +116,7 @@ export default function CellForm({ networks }: { networks: Network[] }, {cells}:
             <div>
               <label className="text-gray-200 mt-2">Nome da Célula</label>
               <input
-                placeholder="Nome da rede"
+                placeholder="Nome..."
                 type="text"
                 autoComplete="off"
                 className={`mb-3 w-full input input-bordered ${errors.name ? "input-error" : ""

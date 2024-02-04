@@ -1,5 +1,5 @@
 import { prisma } from "@/libs/prisma";
-import { AlertCircleIcon, View } from "lucide-react";
+import { View } from "lucide-react";
 import { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
@@ -11,113 +11,99 @@ interface NetworkPageProps {
   };
 }
 
-const getCells = cache(async (id: string) => {
-  const cell = await prisma.cell.findMany({
-    where: {
-      networkId: id
-    },
+
+
+const getNetworkId = cache(async (id: string) => {
+  const membro = await prisma.discipulo.findUnique({
+    where: { id },
+    
     select: {
       id: true,
       name: true,
-      networkId: true,
-      network: true,
-      _count: {
-        select: {
-          Membresia: true
-        }
-      }
-    },
-    orderBy: { name: "asc" },
-  }
-  );
-  if (!cell) notFound();
-  return cell;
-});
-
-const getNetworkId = cache(async (id: string) => {
-  const network = await prisma.network.findUnique({
-    where: { id },
-    include: {
-      cells: {
+      phone: true,
+      birth: true,
+      cell: {
         select: {
           id: true,
-          name: true,
-          _count: {
-            select: {
-              Membresia: true
-            }
-          },
-          Membresia: {
-            select: {
-              responsibility: {
-                select: {
-                  name: true,
-                  
-                }
-              }
-            }
-          }
-        },
-        orderBy: {
-          name: 'desc'
+      name: true,
+      network: {
+        select: {
+          id: true,
+      name: true,
         }
       }
-    },
+        }
+      },
+      cargo: {
+        select: {
+          id: true,
+      title: true,
+        }
+      },
+
+
+    }
   });
-  if (!network) notFound();
-  return network;
+  if (!membro) notFound();
+  return membro;
 });
 
 export async function generateMetadata({
   params: { id },
 }: NetworkPageProps): Promise<Metadata> {
-  const network = await getNetworkId(id);
+  const membro = await getNetworkId(id);
   return {
-    title: network.name + " - Atos 2.47",
+    title: membro.name + " - Atos 2.47",
   };
 }
 
 export default async function NetworkPage({
   params: { id },
 }: NetworkPageProps) {
-  const cells = await getCells(id)
-  const network = await getNetworkId(id);
+ 
+  const membro = await getNetworkId(id);
 
   return (
     <div >
-      <h1 className="flex items-center mb-4 mx-4 font-bold text-2xl">Rede de células {network.name}</h1>
+      <h1 className="flex items-center mb-4 mx-4 font-bold text-2xl">Discipulo: {membro.name}</h1>
             <div>
-        {network.cells.length === 0 ? (
-          <div className="flex items-center justify-center space-x-2 mt-6" ><AlertCircleIcon />
-            <p className='text-red-600 text-xl text-center'>Nenhuma célula cadastrada. Cadastre a primeira célula 👨‍👩‍👧‍👦 </p></div>
-        ) : (
+        
           <table className="table w-full bg-slate-100">
             <thead>
               <tr>
-                <th className="hidden md:flex">#</th>
-                <th>Células</th>
-                <th className="w-auto text-center">Membros</th>
-                
+               
+                <th>Nome</th>
+                <th className="w-auto text-center">telefone</th>
+                <th className="w-auto text-center">Função</th>                
+                <th className="w-auto text-center">Célula</th>                
+                <th className="w-auto text-center">Rede</th>                
                 <th className="text-center">Ações</th>
               </tr>
             </thead>
             <tbody>
-              {network.cells?.map((cell, index) => (
-                <tr key={cell.id}>
-                  <td className='hidden md:flex '>{index + 1}</td>
-                  <td className='w-1/3'>{cell.name}</td>               
+             
+                <tr key={membro.id}>                 
+                  <td className='w-auto'>{membro.name}</td>               
                   <td className='w-auto text-center'>
-                    {cell._count.Membresia}</td>
+                    {membro.phone}</td>
+                  <td className='w-auto text-center'>
+                    {membro.cargo.title}</td>
+                  <td className='w-auto text-center'>
+                  <Link href={"/cells/" + membro.cell.id} className='cursor-pointer hover:text-blue-500 hover:font-semibold underline flex items-center gap-1'>
+                  {membro.cell.name}<View /></Link>
+                    </td>
+                  <td className='w-auto text-center'>
+                    {membro.cell.network.name}</td>
                   <td className='flex justify-center space-x-1'>
-                    <Link href={"/cells/" + cell.id} className='cursor-pointer hover:text-blue-500 hover:font-semibold underline flex items-center gap-1'>
-                    <View /></Link>
+                    <Link href={"#"} className='cursor-pointer hover:text-blue-500 hover:font-semibold underline flex items-center gap-1'>
+                    Editar Excluir<View /></Link>
                   </td>
                 </tr>
-              ))}
+              
 
             </tbody>
           </table>
-        )}
+        
       </div>
     </div>
   )

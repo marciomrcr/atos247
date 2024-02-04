@@ -7,32 +7,33 @@ export async function getNetworks() {
 
       id: true,
       name: true,
+      redeMae: {
+        select: {
+          id: true,
+          name: true
+        }
+      },
       _count: {
         select: {
           cells: true,
-
         },
       },
 
-      cells: {
-        
+      cells: {        
         select: {
           name: true,
           discipulos: {
             where: {
-              Cargo: {
+              cargo: {
                 title: "Pastor"
               }
             }
-
           },
-
           _count: {
             select: {
               discipulos: true
             }
           }
-
         },
         orderBy: {
           name: "asc",

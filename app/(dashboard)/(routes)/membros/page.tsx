@@ -74,7 +74,7 @@ async function MembrosPage() {
                     <td className="hidden md:flex">{index + 1}</td>
                     <td className="w-auto">{membro.name}</td>
                     <td className="w-auto">{membro.cell.name}</td>
-                    <td className="w-auto">{membro.Cargo?.title}</td>
+                    <td className="w-auto">{membro.cargo?.title}</td>
                     <td className="w-auto">{membro.phone}</td>
                     <td className="w-auto">{converterDate(membro.birth)}</td>
                     <td className="flex justify-center space-x-1">  

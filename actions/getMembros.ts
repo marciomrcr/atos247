@@ -8,7 +8,7 @@ export async function getMembros() {
       name: true,
       birth: true,
       phone: true,
-      Cargo: {
+      cargo: {
         select: {
           title: true
         }
