@@ -37,7 +37,7 @@ async function RedesPage() {
       </div>
     
       <div>
-        {celulas.length === 0 ? (
+        {celulas?.length === 0 ? (
           <div className="flex items-center justify-center space-x-2 mt-6" ><AlertCircleIcon/> 
           <p className='text-red-600 text-xl text-center'>Nenhuma rede cadastrada. Cadastre a primeira rede 👨‍👩‍👧‍👦 </p></div>
         ) : (

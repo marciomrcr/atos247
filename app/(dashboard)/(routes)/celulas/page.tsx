@@ -27,7 +27,7 @@ async function CellPage() {
       </div>
     
       <div>
-        {cells.length === 0 ? (
+        {cells?.length === 0 ? (
           <div className="flex items-center justify-center space-x-2 mt-6" ><AlertCircleIcon/> 
           <p className='text-red-600 text-xl text-center'>Nenhuma célula cadastrada. Cadastre a primeira célula 👨‍👩‍👧‍👦 </p></div>
         ) : (
