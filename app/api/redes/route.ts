@@ -1,20 +1,20 @@
-import { prisma } from "@/libs/prisma";
-import type { Network } from "@prisma/client";
+import { prisma } from "@/lib/prisma";
+import type { Rede } from "@prisma/client";
 import { NextResponse } from "next/server";
 
 export const POST = async (request: Request) => {
-  const body: Network = await request.json();
-  const network = await prisma.network.create({
+  const body: Rede = await request.json();
+  const rede = await prisma.rede.create({
     data: {
       name: body.name,
-      redeMaeId: body.redeMaeId,
+      redeGeralId: body.redeGeralId,
     },
   });
-  return NextResponse.json(network, { status: 201 });
+  return NextResponse.json(rede, { status: 201 });
 };
 
 export const GET = async (request: Request) =>{
-  const networks = await prisma.network.findMany({
+  const redes = await prisma.rede.findMany({
     select: {
       id: true,
       name: true,
@@ -25,18 +25,14 @@ export const GET = async (request: Request) =>{
       },
       _count: {
         select: {
-          cells: true,
+          celulas: true,
         },
       },
 
-      cells: {
+      celulas: {
         select: {
           name: true,
-          _count: {
-            select: {
-              discipulos: true,
-            },
-          },
+          id: true,         
         },
 
         orderBy: {
@@ -50,5 +46,5 @@ export const GET = async (request: Request) =>{
     },
   });
 
-  return NextResponse.json(networks, { status: 200 });
+  return NextResponse.json(redes, { status: 200 });
 }

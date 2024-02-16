@@ -18,15 +18,20 @@ export const metadata: Metadata = {
 
 const formSchema = z.object({
   name: z
-  .string()    
-  .nonempty('O nome não pode ficar em branco!')
-  .min(3, "O Nome deverá ter pelo menos 3 letras.")
-  .trim()
-  .transform(name =>{
-    return name.trim().split(' ').map(word =>{
-      return word[0].toLocaleUpperCase().concat(word.substring(1))
-    }).join(' ')
-  }),
+  .string()
+    .min(3, "O Nome deverá ter pelo menos 3 letras.")
+    .trim()
+    .transform((name) => {
+      return name
+        .charAt(0)
+        .toUpperCase()
+        .concat(
+          name
+            .substring(1)
+            .normalize("NFD")
+            .replace(/[\u0300-\u036f]/g, "")
+        );
+    }),
 });
 
 type Network = z.infer<typeof formSchema>;
@@ -53,7 +58,7 @@ export default function RedeGeralForm() {
 
   const handleSubmitForm = async (data: Network ) => {
    
-  const response = await fetch("api/redes/redesGerais", {
+  const response = await fetch("api/redesGerais", {
   method: "POST",
   body: JSON.stringify({ ...data}),
   headers: {

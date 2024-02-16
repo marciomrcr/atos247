@@ -14,10 +14,20 @@ export const metadata: Metadata = {
 
 const formSchema = z.object({
 
-  name: z.string().trim()
-  .nonempty('O nome não pode ficar em branco!')
-  .min(3, { message: 'O nome deverá ter pelo menos 3 letras!' })
-  .trim(),
+  name: z.string()
+  .min(3, "O Nome deverá ter pelo menos 3 letras.")
+  .trim()
+  .transform((name) => {
+    return name
+      .charAt(0)
+      .toUpperCase()
+      .concat(
+        name
+          .substring(1)
+          .normalize("NFD")
+          .replace(/[\u0300-\u036f]/g, "")
+      );
+  }),
   
 });
 
@@ -49,7 +59,7 @@ export default function NetworkMotherUpdate({ network }: IFormProps) {
   const onSubmit = async (data: Network) => {
     
     try {
-      await axios.patch(`api/redes/redesGerais/${network.id}`, {
+      await axios.patch(`api/redesGerais/${network.id}`, {
         name: data.name
       });
 

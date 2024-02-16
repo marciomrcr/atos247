@@ -49,7 +49,7 @@ export default function NetworkUpdate({ network }: IFormProps) {
   const onSubmit = async (data: Network) => {
     
     try {
-      await axios.patch(`api/networks/${network.id}`, {
+      await axios.patch(`api/redes/${network.id}`, {
         name: data.name
       });
 

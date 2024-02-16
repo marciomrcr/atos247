@@ -1,9 +1,8 @@
-import { getNetworkMother } from "@/actions/getNetworkMother";
+import { getRedesGerais } from "@/actions/getRedesGerais";
 import { AlertCircleIcon, View } from "lucide-react";
 import type { Metadata } from "next";
 import Link from "next/link";
-import NetworkUpdate from "./NetworkUpdate";
-import NetworkDelete from "./NetworksDelete";
+
 import RedeGeralForm from "./RedeGeralForm";
 
 
@@ -18,7 +17,7 @@ interface RedePageProps {
 }
 
 async function RedesGerais() {
-  const networks = await getNetworkMother();
+  const networks = await getRedesGerais();
   
  
   return (
@@ -50,8 +49,8 @@ async function RedesGerais() {
             <tbody>              
               {networks?.map((network, index) => {
                 // Calcula o total de membros
-                const totalCell = network.Network.reduce(
-                  (total, item) => total + item._count.cells,
+                const totalCell = network.redes.reduce(
+                  (total, item) => total + item._count.celulas,
                   0
                 );
                 return (
@@ -60,16 +59,16 @@ async function RedesGerais() {
                     <td className="w-auto">{network.name}</td>
                   <td className="w-auto ">  
                     <Link href={"/redesGerais/" + network.id} className='cursor-pointer hover:text-blue-500 hover:font-semibold flex items-center justify-center gap-1'>
-                    {network._count.Network} <View/> </Link>
+                    {network._count.redes} <View/> </Link>
                     </td>
                     <td className='w-auto'>
                     <p className='  flex items-center justify-center gap-1'>
-                    {totalCell} </p>    
+                    {network.redes.map((item)=>item._count.celulas)}  </p>    
                       
                      </td> 
                     <td className='flex items-center justify-center mx-1'>
-                      <NetworkDelete id={network.id} />
-                      <NetworkUpdate network={network} /> 
+                      {/* <NetworkDelete id={network.id} />
+                      <NetworkUpdate network={network} />  */}
                       {/* <NetworkView network={network} /> */}
                      
                     </td>

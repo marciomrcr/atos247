@@ -1,118 +1,116 @@
 "use client";
 
-import { cn } from "@/lib/utils";
-import { GaugeCircle, Network, User, UserPlus, Users } from "lucide-react";
-import { Montserrat } from "next/font/google";
-import Image from "next/image";
 import Link from "next/link";
+
+import { useState } from "react";
+import {
+  MdKeyboardArrowLeft,
+  MdOutlineConnectWithoutContact,
+} from "react-icons/md";
+
 import { usePathname } from "next/navigation";
-// ... (código existente)
+import { FaChalkboardTeacher } from "react-icons/fa";
+import {
+  FaBaby,
+  FaPeopleRoof,
+  FaPersonWalkingDashedLineArrowRight,
+  FaUsers,
+} from "react-icons/fa6";
+import { GrUserWorker } from "react-icons/gr";
+import { LuLayoutPanelLeft } from "react-icons/lu";
 
-const montserrat = Montserrat({
-  weight: "600",
-  subsets: ["latin"],
-});
- 
-
-const routes = [
+const sidebarItems = [
   {
-    label: "Dashboard",
-    icon: GaugeCircle,
+    name: "Dashboard",
     href: "/dashboard",
-    color: "text-sky-500",
-    
+    icon: LuLayoutPanelLeft,
+  },
+
+  {
+    name: "Células",
+    href: "/celulas",
+    icon: FaPeopleRoof,
   },
   {
-    label: "Batismo",
-    icon: UserPlus,
-    href: "/batismo",
-    color: "text-sky-500",
-  },  
-  
-  {
-    label: "Células",
-    icon: Users,
-    href: "/cells",
-    color: "text-sky-500",
-  },
-  {
-    label: "Redes",
-    icon: Network,
-    href: "/redes",
-    color: "text-sky-500",
-  },
-  {
-    label: "Redes Gerais",
-    icon: Network,
-    href: "/redesGerais",
-    color: "text-sky-500",
-  },
-  {
-    label: "Discípulos",
-    icon: User,
+    name: "Membros",    
     href: "/membros",
-    color: "text-sky-500",
+    icon: FaUsers,
   },
   {
-    label: "Lideres",
-    icon: User,
-    href: "/lideres",
-    color: "text-sky-500",
+    name: "Redes",
+    href: "/redesGerais",
+    icon: MdOutlineConnectWithoutContact,
+  },
+
+  {
+    name: "Funções",
+    href: "/funcoes",
+    icon: GrUserWorker,
   },
   {
-    label: "Supervisores",
-    icon: User,
-    href: "/supervisores",
-    color: "text-sky-500",
+    name: "Batismo",
+    href: "/batismos",
+    icon: FaBaby,
   },
-  
   {
-    label: "Pastores",
-    icon: User,
-    href: "/pastores",
-    color: "text-sky-500",
-  }
+    name: "Treinamentos",
+    href: "/treinamentos",
+    icon: FaChalkboardTeacher,
+  },
 ];
 
-const Sidebar = () => {
-  const pathname = usePathname();
+function Sidebar() {
+  const [isCollapsed, setIsCollapsed] = useState(false);
+  const toggleIsCollapsedSidebar = () => {
+    setIsCollapsed((prev) => !prev);
+  };
 
+  const pathname = usePathname();
   return (
-    <div className="space-y-4 py-4 flex flex-col h-full bg-[#111827] text-white">
-      <div className="px-3 py-2 flex-1">
-        <Link href="/" className="flex items-center pl-3 mb-14">
-          <div className="relative w-14 h-12 mr-4"
-          
-          >
-            <Image fill alt="Logo" src="/logo.png" />
-          </div>
-          <h1 className={cn("text-xl font-bold", montserrat.className)}>
-            Rede IDE III🚶‍♀️🚶‍♀️
-          </h1>
-        </Link>
-        <div className="space-y-1">
-          {routes.map((route) => (
-            <Link
-              key={route.href}
-              href={route.href}
-              className={cn(
-                "text-sm group flex p-3 w-full justify-start font-medium cursor-pointer hover:text-white hover:bg-white/10 rounded-lg transition",
-                pathname === route.href
-                  ? "text-white bg-white/10"
-                  : "text-zinc-400"
-              )}
-          
-            >
-              <div className="flex items-center flex-1">
-                <route.icon className={cn("h-5 w-5 mr-3", route.color)} />
-                {route.label}
-              </div>
-            </Link>
-          ))}
+    <div className="bg-[#7f0000]  relative h-[100vh]">
+      <button className="btn_arrow" onClick={toggleIsCollapsedSidebar}>
+        <MdKeyboardArrowLeft />
+      </button>
+      <aside className="sidebar" data-collapse={isCollapsed}>
+        <div className="sidebar_top">
+          {/* <Image
+            src="./vercel.svg"
+            width={80}
+            height={60}
+            alt="logo"
+            className="sidebar_logo"
+          /> */}
+          <Link href='/'>
+          <FaPersonWalkingDashedLineArrowRight className="sidebar_logo text-green-300" /></Link>
+          <p className="text-3xl font-semibold text-gray-300">Rede IDE</p>
         </div>
-      </div>
+        <ul className="sidebar_list">
+          {sidebarItems.map(({ name, href, icon: Icon }) => {
+            return (
+              <li
+                className="sidebar_item"
+                key={name}
+                onClick={() => setIsCollapsed(!isCollapsed)}
+              >
+                <Link
+                  className={`sidebar_link ${
+                    pathname === href ? "sidebar_link_active" : ""
+                  }`}
+                  href={href}
+                >
+                  <span className="sidebar_icon">
+                    <Icon />
+                  </span>
+
+                  <span className="sidebar_name">{name}</span>
+                </Link>
+              </li>
+            );
+          })}
+        </ul>
+      </aside>
     </div>
   );
-};
+}
 
 export default Sidebar;

@@ -1,4 +1,4 @@
-import { prisma } from "@/libs/prisma";
+import { prisma } from "@/lib/prisma";
 import { AlertCircleIcon, View } from "lucide-react";
 import { Metadata } from "next";
 import Link from "next/link";
@@ -13,35 +13,14 @@ interface RedePageProps {
 }
 
 const getRedes = async () =>{
-  const redes = await prisma.network.findMany({
+  const redes = await prisma.rede_Geral.findMany({
     select: {
       id: true,
-      name: true,
-      cells:{
-        select: {
-          _count: {
-            select: {
-              discipulos: true
-            }
-          }
-        }
-      },
-      redeMae:{
-        select: {
-          id: true,
-          name: true,
-        }
-      } ,
-      // cells: {
-      //   select: {
-      //     id: true,
-      //     name: true,
-
-      //   }
-      //},
+      name: true,      
+      
       _count:{
         select: {
-          cells: true
+          redes: true
         }
       }
     }
@@ -51,29 +30,21 @@ const getRedes = async () =>{
 }
 
 const getRedeById = cache(async (id: string) => {
-  const rede = await prisma.networkMother.findUnique({
+  const rede = await prisma.rede_Geral.findUnique({
     where: {
       id
     },
     select: {
       id: true,
       name: true,      
-      Network: {
+      redes: {
         select: {
           id: true,
           name: true,
-          cells:{
-            select:{
-              _count:{
-                select:{
-                  discipulos: true
-                }
-              }
-            }
-          } ,
+       
           _count: {
             select: {
-              cells: true
+              celulas: true
             }
           }
         }
@@ -113,7 +84,7 @@ export default async function CellPage({
           Supervisor: <span className="font-semibold "></span></h3>
 </div>
       <div>
-        {rede.Network.length === 0? (
+        {rede.redes.length === 0? (
           <div>
           <div className="flex items-center justify-center " > 
           <div className="flex mt-6">
@@ -141,7 +112,7 @@ return (
     <td className="hidden md:flex">{index + 1}</td>              
        <td className='w-auto'>{item.name} </td>                                 
     <td className='fw-auto'><Link href={"/redes/" + item.id} className='cursor-pointer hover:text-blue-500 hover:font-semibold flex items-center justify-center gap-1'>
-     {item._count.cells} <View /></Link>
+     {item._count.redes} <View /></Link>
     </td>
     
   </tr>

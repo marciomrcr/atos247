@@ -22,7 +22,7 @@ const router = useRouter()
   const [isOpen, setIsOpen] = useState(false)
 
   const handleDelete = async (id: string) =>{
-        await axios.delete(`api/redes/redesGerais/${id}`)
+        await axios.delete(`api/redesGerais/${id}`)
         router.refresh()
     setIsOpen(false)
   }

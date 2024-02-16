@@ -7,22 +7,22 @@ import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 
 export const metadata: Metadata = {
-  title: 'Redes de Células - Jetro'
+  title: 'Células - Atos 2.47'
 }
 
-type Network = {
+type Cell = {
   id: string , 
   name?: string,
   
 }
 
-export default function NetworkDelete({id, name}: Network
+export default function DeleteCellForm({id, name}: Cell
 ) {  
 const router = useRouter()
   const [isOpen, setIsOpen] = useState(false)
 
   const handleDelete = async (id: string) =>{
-        await axios.delete(`api/redes/${id}`)
+        await axios.delete(`api/celulas/${id}`)
         router.refresh()
     setIsOpen(false)
   }
@@ -32,14 +32,14 @@ const router = useRouter()
     
   }
   return (
-    <div>
-      <Trash2 onClick={handleModal} className="cursor-pointer"   
+    <div className='mb-0'>
+      <Trash2 onClick={handleModal} className="cursor-pointer bm-0"   
           />
       {/* <button className='btn btn-error btn-sm' onClick={handleModal}>Excluir</button> */}
       <div className={
         isOpen ? 'modal modal-open' : 'modal'}>
         <div className='modal-box'>
-          <h3 className="mb-2 text-lg text-center font-bold text-red-500">Deseja realmente excluir a rede {name}?</h3>     
+          <h3 className="mb-2 text-lg text-center font-bold text-red-500">Deseja realmente excluir a célula {name}?</h3>     
     
       <div className='modal-action'>   
       <div onClick={handleModal} className="cursor-pointer flex items-center">
@@ -51,10 +51,6 @@ const router = useRouter()
               <Trash2           
           /><span className="text-red-600 px-2">Excluir</span>
               </div>
-
-
-          
-          
         </div>
       </div>
 

@@ -24,182 +24,45 @@ enum sexo {
   Masculino
 }
 
-model Batismo {
-  id          String   @id @default(auto()) @map("_id") @db.ObjectId
-  name        String
-  email       String   @unique
-  phone       String
-  birthDay    DateTime
-  sexo        sexo
-  batismo     DateTime
-  anjo        String
-  cep         String
-  logradouro  String
-  numero      String
-  complemento String?
-  bairro      String
-  cidade      String
-
-  cell   Cell   @relation(fields: [cellId], references: [id])
-  cellId String @db.ObjectId
-
-  @@map("batismos")
-}
-
-enum Origem {
-  Outra_igreja
-  Batismo
-  Existente
-}
-
-model NetworkMother {
+model Rede_Geral {
   id     String  @id @default(auto()) @map("_id") @db.ObjectId
   name   String  @unique
   active Boolean @default(true)
 
-  createdAt       DateTime          @default(now())
-  updatedAt       DateTime          @updatedAt
-  HistoricoPrRede HistoricoPrRede[]
-  Network         Network[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
-  @@map("rede_mae")
+  redes Rede[]
+
+  @@map("redes_gerais")
 }
 
-model Network {
-  id        String  @id @default(auto()) @map("_id") @db.ObjectId
-  redeMaeId String? @db.ObjectId
-  name      String  @unique
+model Rede {
+  id          String @id @default(auto()) @map("_id") @db.ObjectId
+  redeGeralId String @db.ObjectId
+  name        String @unique
 
   active Boolean @default(true)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  cells               Cell[]
-  historicoSupervisor HistoricoSupervisor[]
-  redeMae             NetworkMother?        @relation(fields: [redeMaeId], references: [id])
+  celulas Celula[]
+
+  redeMae Rede_Geral @relation(fields: [redeGeralId], references: [id])
 
   @@map("redes")
 }
 
-model Cell {
-  id        String @id @default(auto()) @map("_id") @db.ObjectId
-  name      String
-  networkId String @db.ObjectId
-
-  multiplicacao  Boolean @default(false)
-  celulaMaeId    String? @db.ObjectId
-  celulaMae      Cell?   @relation("CellHistoric", fields: [celulaMaeId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  celulasGeradas Cell[]  @relation("CellHistoric")
-  active         Boolean @default(true)
-
-  network Network @relation(fields: [networkId], references: [id])
+model Celula {
+  id     String  @id @default(auto()) @map("_id") @db.ObjectId
+  name   String  @unique
+  redeId String  @db.ObjectId
+  active Boolean @default(true)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  redes     Rede     @relation(fields: [redeId], references: [id])
 
-  Batismo         Batismo[]
-  discipulos      Discipulo[]
-  HistoricoLider  HistoricoLider[]
-  HistoricoMembro HistoricoMembro[]
-
-  @@index([name, networkId])
   @@map("celulas")
 }
-
-model Cargo {
-  id                  String                @id @default(auto()) @map("_id") @db.ObjectId
-  title               String                @unique
-  HistoricoMembro     HistoricoMembro[]
-  Discipulo           Discipulo[]
-  HistoricoLider      HistoricoLider[]
-  historicoSupervisor HistoricoSupervisor[]
-  HistoricoPrRede     HistoricoPrRede[]
-
-  @@map("cargos")
-}
-
-model Discipulo {
-  id      String   @id @default(auto()) @map("_id") @db.ObjectId
-  name    String   @unique
-  birth   DateTime
-  phone   String
-  cellId  String   @db.ObjectId
-  cargoId String   @db.ObjectId
-
-  cell                Cell                  @relation(fields: [cellId], references: [id])
-  cargo               Cargo                 @relation(fields: [cargoId], references: [id])
-  historicoMembro     HistoricoMembro[]
-  HistoricoLider      HistoricoLider[]
-  historicoSupervisor HistoricoSupervisor[]
-  HistoricoPrRede     HistoricoPrRede[]
-
-  @@map("discipulos")
-}
-
-model HistoricoMembro {
-  id        String    @id @default(auto()) @map("_id") @db.ObjectId
-  cellId    String    @db.ObjectId
-  cargoId   String    @db.ObjectId
-  membroId  String    @db.ObjectId
-  startDate DateTime  @default(now())
-  endDate   DateTime?
-  cell      Cell      @relation(fields: [cellId], references: [id])
-  cargo     Cargo     @relation(fields: [cargoId], references: [id])
-  membro    Discipulo @relation(fields: [membroId], references: [id])
-
-  @@map("historicoMembro")
-}
-
-model HistoricoLider {
-  id        String    @id @default(auto()) @map("_id") @db.ObjectId
-  cellId    String    @db.ObjectId
-  cargoId   String    @db.ObjectId
-  membroId  String    @db.ObjectId
-  startDate DateTime  @default(now())
-  endDate   DateTime?
-
-  cell   Cell      @relation(fields: [cellId], references: [id])
-  cargo  Cargo     @relation(fields: [cargoId], references: [id])
-  membro Discipulo @relation(fields: [membroId], references: [id])
-
-  @@map("HistoricoLider")
-}
-
-model HistoricoSupervisor {
-  id        String    @id @default(auto()) @map("_id") @db.ObjectId
-  redeId    String    @db.ObjectId
-  cargoId   String    @db.ObjectId
-  membroId  String    @db.ObjectId
-  startDate DateTime  @default(now())
-  endDate   DateTime?
-
-  rede   Network   @relation(fields: [redeId], references: [id])
-  cargo  Cargo     @relation(fields: [cargoId], references: [id])
-  membro Discipulo @relation(fields: [membroId], references: [id])
-
-  @@map("historicoSupervisor")
-}
-
-model HistoricoPrRede {
-  id        String    @id @default(auto()) @map("_id") @db.ObjectId
-  redeMaeId String    @db.ObjectId
-  cargoId   String    @db.ObjectId
-  membroId  String    @db.ObjectId
-  startDate DateTime  @default(now())
-  endDate   DateTime?
-
-  rede   NetworkMother @relation(fields: [redeMaeId], references: [id])
-  cargo  Cargo         @relation(fields: [cargoId], references: [id])
-  membro Discipulo     @relation(fields: [membroId], references: [id])
-
-  @@map("historicoPrRede")
-}
-
-// model User {
-//   id          String  @id @default(auto()) @map("_id") @db.ObjectId
-//   name        String?
-//   successorId String? @unique @db.ObjectId
-//   successor   User?   @relation("BlogOwnerHistory", fields: [successorId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-//   predecessor User?   @relation("BlogOwnerHistory")
-// }

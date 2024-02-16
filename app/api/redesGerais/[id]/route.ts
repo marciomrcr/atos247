@@ -1,72 +1,71 @@
 import { prisma } from "@/lib/prisma";
-import type { Rede } from "@prisma/client";
+import type { Rede_Geral } from "@prisma/client";
 import { NextResponse } from "next/server";
 
 export const DELETE = async (
   request: Request,
   { params }: { params: { id: string } }
 ) => {
-  const getRede = await prisma.rede.findUnique({
+  const getNetwork = await prisma.rede_Geral.findUnique({
     where: {
       id: params.id,
     },
   });
-  if (!getRede) {
+  if (!getNetwork) {
     return "Rede não encontrada";
   }
 
-  const rede = await prisma.rede.delete({
+  const network = await prisma.rede_Geral.delete({
     where: {
       id: params.id,
     },
   });
-  return NextResponse.json(rede, { status: 200 });
+  return NextResponse.json(network, { status: 200 });
 };
 
 export const PATCH = async (
   request: Request,
   { params }: { params: { id: string } }
 ) => {
-  const body: Rede = await request.json();
-  const getRede = await prisma.rede.findUnique({
+  const body: Rede_Geral = await request.json();
+  const getNetwork = await prisma.rede_Geral.findUnique({
     where: {
       id: params.id,
     },
   });
-  if (!getRede) {
+  if (!getNetwork) {
     return "Rede não encontrada";
   }
 
-  const rede = await prisma.rede.update({
+  const network = await prisma.rede_Geral.update({
     where: {
       id: params.id,
     },
     data: {
       name: body.name,
-      redeGeralId: body.redeGeralId
     },
   });
-  return NextResponse.json(rede, { status: 201 });
+  return NextResponse.json(network, { status: 201 });
 };
 
 export const GET = async (
   request: Request,
   { params }: { params: { id: string } }
 ) => {
-  const getRede = await prisma.rede.findUnique({
+  const getNetwork = await prisma.rede_Geral.findUnique({
     where: {
       id: params.id,
     },
   });
-  if (!getRede) {
+  if (!getNetwork) {
     return "Rede não encontrada";
   }
 
-  // const rede = await prisma.rede.findUnique({
-  //   where: {
-  //     id: params.id,
-  //   },
-  // });
+  const network = await prisma.rede_Geral.findUnique({
+    where: {
+      id: params.id,
+    },
+  });
 
-  return NextResponse.json(getRede, { status: 200 });
+  return NextResponse.json(network, { status: 200 });
 };

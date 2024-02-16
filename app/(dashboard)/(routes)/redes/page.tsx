@@ -2,11 +2,12 @@ import type { Metadata } from "next";
 
 import { AlertCircleIcon } from "lucide-react";
 
-import { getNetworkMother } from "@/actions/getNetworkMother";
-import { getNetworks } from "@/actions/getNetworks";
+import {getRedesGerais} from "@/actions/getRedesGerais";
+import { getRedes } from "@/actions/getRedes";
 import NetworkUpdate from "./NetworkUpdate";
 import NetworkDelete from "./NetworksDelete";
 import RedesForm from "./RedesForm";
+import { getCelulas } from "@/actions/getCelulas";
 
 
 export const metadata: Metadata = {
@@ -20,7 +21,7 @@ interface CellPageProps {
 }
 
 async function RedesPage() {
-  const [redes, redeMae] = await Promise.all( [getNetworks(), getNetworkMother()])
+  const [celulas, redeMae] = await Promise.all( [getCelulas(), getRedesGerais()])
 
 
 
@@ -36,7 +37,7 @@ async function RedesPage() {
       </div>
     
       <div>
-        {redes.length === 0 ? (
+        {celulas.length === 0 ? (
           <div className="flex items-center justify-center space-x-2 mt-6" ><AlertCircleIcon/> 
           <p className='text-red-600 text-xl text-center'>Nenhuma rede cadastrada. Cadastre a primeira rede 👨‍👩‍👧‍👦 </p></div>
         ) : (
@@ -44,27 +45,25 @@ async function RedesPage() {
             <thead>
               <tr>
                 <th className="hidden md:flex">#</th>
-                <th>Nome</th>
-                <th>Células</th>
+                <th>Nome</th>                
                 <th>Membros</th>
                 <th>Rede Mãe</th>  
                 <th className="text-center">Ações</th>
               </tr>
             </thead>
             <tbody>              
-              {redes?.map((rede, index) => {
+              {celulas?.map((rede, index) => {
                 // Calcula o total de membros
-                const totalMembros = rede.cells.reduce(
-                  (total, item) => total + item._count.discipulos,
-                  0
-                );
+                // const totalMembros = rede.celulas.reduce(
+                //   (total, item) => total + item._count.discipulos,
+                //   0
+                // );
                 return (
                   <tr key={rede.id}>
                     <td className="hidden md:flex">{index + 1}</td>
                     <td className="w-auto">{rede.name}</td>
-                    <td className="w-1/6">{rede._count.cells}</td>
-                    <td className="w-1/6">{totalMembros}</td>                    
-                    <td className="w-1/6">{rede.redeMae?.name}</td>  
+                    <td className="w-1/6">1000</td>                    
+                    <td className="w-1/6">{rede.redes.name}</td>                     
                     <td className="flex justify-center space-x-1">  
                       <NetworkDelete id={rede.id} />
                       <NetworkUpdate network={rede} /> 
