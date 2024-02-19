@@ -41,7 +41,8 @@ export async function generateMetadata({
 }: CellPageProps): Promise<Metadata> {
   const cell = await getCellById(id);
   return {
-    title: cell.name + " - Atos 2.47",
+    title: cell.name,
+    description: "Celula - Rede IDE 3"
   };
 }
 

@@ -7,21 +7,17 @@ import { getRedes } from "@/actions/getRedes";
 import NetworkUpdate from "./NetworkUpdate";
 import NetworkDelete from "./NetworksDelete";
 import RedesForm from "./RedesForm";
-import { getCelulas } from "@/actions/getCelulas";
+
 
 
 export const metadata: Metadata = {
-  title: "Redes de Células - Jetro",
+  title: "Redes de Células",
+  description: "Redes de células"
 };
 
-interface CellPageProps {
-  params: {
-    id: string;
-  };
-}
 
 async function RedesPage() {
-  const [celulas, redeMae] = await Promise.all( [getCelulas(), getRedesGerais()])
+  const [redes, redeMae] = await Promise.all( [getRedes(), getRedesGerais()])
 
 
 
@@ -37,7 +33,7 @@ async function RedesPage() {
       </div>
     
       <div>
-        {celulas?.length === 0 ? (
+        {redes?.length === 0 ? (
           <div className="flex items-center justify-center space-x-2 mt-6" ><AlertCircleIcon/> 
           <p className='text-red-600 text-xl text-center'>Nenhuma rede cadastrada. Cadastre a primeira rede 👨‍👩‍👧‍👦 </p></div>
         ) : (
@@ -46,15 +42,15 @@ async function RedesPage() {
               <tr>
                 <th className="hidden md:flex">#</th>
                 <th>Nome</th>                
-                <th>Membros</th>
+                <th>Células</th>
                 <th>Rede Mãe</th>  
                 <th className="text-center">Ações</th>
               </tr>
             </thead>
             <tbody>              
-              {celulas?.map((rede, index) => {
+              {redes.map((rede, index) => {
                 // Calcula o total de membros
-                // const totalMembros = rede.celulas.reduce(
+                // const totalMembros = rede.redes.reduce(
                 //   (total, item) => total + item._count.discipulos,
                 //   0
                 // );
@@ -62,8 +58,8 @@ async function RedesPage() {
                   <tr key={rede.id}>
                     <td className="hidden md:flex">{index + 1}</td>
                     <td className="w-auto">{rede.name}</td>
-                    <td className="w-1/6">1000</td>                    
-                    <td className="w-1/6">{rede.redes.name}</td>                     
+                    <td className="w-1/6">{rede._count.celulas}</td>                    
+                    <td className="w-1/6">{rede.redeMae.name}</td>                     
                     <td className="flex justify-center space-x-1">  
                       <NetworkDelete id={rede.id} />
                       <NetworkUpdate network={rede} /> 

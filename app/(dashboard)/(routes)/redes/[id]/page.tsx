@@ -73,7 +73,8 @@ export async function generateMetadata({
 }: NetworkPageProps): Promise<Metadata> {
   const network = await getNetworkId(id);
   return {
-    title: network.name + " - Atos 2.47",
+    title: network.name,
+    description: "Rede de Células - IDE 3"
   };
 }
 

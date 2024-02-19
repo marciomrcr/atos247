@@ -20,7 +20,7 @@ export const getCelulas = async () => {
     return res;
     
   } catch (error) {
-    return ( "Algo deu erra na consulta")
+    return ( "Algo deu errado na consulta")
     
   }
   

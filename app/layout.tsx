@@ -8,8 +8,10 @@ import Sidebar from "@/components/Sidebar";
 // const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Rede IDE 3",
-  description: "Gestão de Células",
+  title: {
+    default: "Rede IDE 3 - Home",
+    template: "%s | Rede IDE 3"
+  }
 };
 
 export default function RootLayout({

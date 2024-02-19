@@ -5,6 +5,16 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { cache } from "react";
 
+export async function generateMetadata({
+  params: { id },
+}: RedePageProps): Promise<Metadata> {
+  const rede = await getRedeById(id);
+  return {
+    title: rede.name,
+    description: "Rede Geral - IDE 3"
+  };
+}
+
 
 interface RedePageProps {
   params: {
@@ -55,15 +65,6 @@ const getRedeById = cache(async (id: string) => {
   if (!rede) notFound();
   return rede;
 });
-
-export async function generateMetadata({
-  params: { id },
-}: RedePageProps): Promise<Metadata> {
-  const rede = await getRedeById(id);
-  return {
-    title: rede.name + " - Atos 2.47",
-  };
-}
 
 export default async function CellPage({
   params: { id },

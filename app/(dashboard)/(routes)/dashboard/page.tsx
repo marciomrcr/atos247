@@ -5,8 +5,8 @@ import Link from "next/link";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Overview Ide",
-  description: "Visão geral da gestão de células.",
+  title: "Dashboard",
+  description: "Overview Rede IDE 3.",
 }
 
 async function getRedes() {

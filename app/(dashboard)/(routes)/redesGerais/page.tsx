@@ -2,12 +2,15 @@ import { getRedesGerais } from "@/actions/getRedesGerais";
 import { AlertCircleIcon, View } from "lucide-react";
 import type { Metadata } from "next";
 import Link from "next/link";
+import { prisma } from "@/lib/prisma"
+
 
 import RedeGeralForm from "./RedeGeralForm";
 
 
 export const metadata: Metadata = {
-  title: "Redes Gerais - Athos 2.47",
+  title: "Redes Gerais",
+  description: "Redes de células"
 };
 
 interface RedePageProps {
@@ -16,8 +19,30 @@ interface RedePageProps {
   };
 }
 
+const getRede = async ()=> {
+ 
+  const redes = await prisma.rede.findMany({
+    select: {
+      id: true,
+      name: true,
+      redeMae: {
+        select:{
+          name: true
+        }
+      },
+      _count: {
+        select: {
+          celulas: true
+        }
+      }
+    }
+  })
+  return redes
+}
+
 async function RedesGerais() {
   const networks = await getRedesGerais();
+  const Redes = await getRede()
   
  
   return (
@@ -81,6 +106,38 @@ async function RedesGerais() {
           </table>
         )}
       </div>
+      <h1>Teste consultas Redes sem cache</h1>
+      <table className="table w-full">
+                 <thead>
+                   <tr>
+                     <th className='hidden md:table-cell'>#</th>
+                     <th>Rede</th>
+                     <th>Nº Célula</th>
+                     <th>Rede Geral</th>                      
+                     <th className="text-center">Ações</th>
+                   </tr>
+                 </thead>
+                 <tbody>
+                   {Redes?.map((rede, index) => (
+                      <tr key={rede.id}>
+                        <td className='hidden md:table-rede'>{index + 1}</td>
+                        <td className='w-auto'>{rede.name}</td>                    
+                        <td className='w-auto'>{rede._count.celulas}</td> 
+                        <td className='w-auto'>{rede.redeMae.name}</td> 
+                            {/* <td className='w-auto'>
+                    <Link href={"/cells/" + cell.id} className='cursor-pointer hover:text-blue-500 hover:font-semibold flex items-center justify-center gap-1'>
+                        {cell._count.discipulos}
+                     <View /> </Link></td> */}
+                     
+                        <td className='flex items-center justify-center mx-1 gap-2'>
+                           
+                        </td>
+        
+                      </tr>
+                    ))}
+        
+                  </tbody>
+                </table>
     </div>
   );
 }
