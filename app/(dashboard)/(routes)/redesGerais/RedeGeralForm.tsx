@@ -74,9 +74,10 @@ toast.success("Rede cadastrada com sucesso!", {
   position: toast.POSITION.TOP_CENTER,
 });
 
-refresh()
+
 handleModal() 
 setLoading(true);
+refresh()
  } 
 
   return (
