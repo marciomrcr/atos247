@@ -1,7 +1,7 @@
 import { prisma } from "@/lib/prisma";
 
 export const getCelulas = async () => {
-  try {
+
     const res = await prisma.celula.findMany({
       select: {
         id: true,
@@ -19,9 +19,6 @@ export const getCelulas = async () => {
     });
     return res;
     
-  } catch (error) {
-    return ( "Algo deu errado na consulta")
-    
-  }
+ 
   
 };
