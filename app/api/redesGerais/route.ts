@@ -1,5 +1,5 @@
 import { prisma } from "@/lib/prisma";
-import { revalidatePath } from "next/cache";
+import { revalidateTag } from "next/cache";
 
 import { NextResponse } from "next/server";
 
@@ -19,7 +19,7 @@ export const POST = async(request: Request) =>{
 
   if (redeExists) {
     return NextResponse.json({
-      message: `A rede ${redeExists.name} já exite: ${redeExists.id}`,
+      message: `A rede ${redeExists.name} já existe: ${redeExists.id}`,
       status: 409,
     });
   }
@@ -29,7 +29,7 @@ export const POST = async(request: Request) =>{
 
     }
   })
-  revalidatePath('/redesGerais')
+  revalidateTag('redesGerais')
   return NextResponse.json(rede,{status: 201})
 }
 

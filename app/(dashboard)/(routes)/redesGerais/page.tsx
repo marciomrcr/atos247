@@ -1,10 +1,11 @@
 import { getRedesGerais } from "@/actions/getRedesGerais";
+import { prisma } from "@/lib/prisma";
 import { AlertCircleIcon, View } from "lucide-react";
 import type { Metadata } from "next";
 import Link from "next/link";
-import { prisma } from "@/lib/prisma"
 
 
+import { Rede } from "@prisma/client";
 import RedeGeralForm from "./RedeGeralForm";
 
 
@@ -16,11 +17,18 @@ export const metadata: Metadata = {
 interface RedePageProps {
   params: {
     id: string;
+    redeId: string
   };
 }
 
-const getRede = async ()=> {
- 
+const getRedes = async () =>{
+  const res = await fetch("/api/redesGerais", {
+    cache: 'no-cache', next: { tags: ['redesGerais']}
+  })
+  return res.json()
+}
+
+const getRede = async ()=> { 
   const redes = await prisma.rede.findMany({
     select: {
       id: true,
@@ -42,7 +50,8 @@ const getRede = async ()=> {
 
 async function RedesGerais() {
   const networks = await getRedesGerais();
-  const Redes = await getRede()
+  const Redes: Rede[] = await getRedes()
+ 
   
  
   return (
@@ -118,12 +127,12 @@ async function RedesGerais() {
                    </tr>
                  </thead>
                  <tbody>
-                   {Redes?.map((rede, index) => (
+                   {Redes.map((rede, index) => (
                       <tr key={rede.id}>
                         <td className='hidden md:table-rede'>{index + 1}</td>
                         <td className='w-auto'>{rede.name}</td>                    
-                        <td className='w-auto'>{rede._count.celulas}</td> 
-                        <td className='w-auto'>{rede.redeMae.name}</td> 
+                        <td className='w-auto'>{rede.redeGeralId}</td> 
+                        
                             {/* <td className='w-auto'>
                     <Link href={"/cells/" + cell.id} className='cursor-pointer hover:text-blue-500 hover:font-semibold flex items-center justify-center gap-1'>
                         {cell._count.discipulos}
