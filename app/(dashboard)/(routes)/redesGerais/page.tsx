@@ -13,7 +13,7 @@ export const metadata: Metadata = {
 };
 
 interface RedePageProps {
-  redesGerais: {
+  redes: {
     id: string;
     name: string;
     redeMae: {
@@ -139,7 +139,7 @@ async function RedesGerais() {
                    </tr>
                  </thead>
                  <tbody>
-                   {Redes.redesGerais.map((rede, index) => (
+                   {Redes.redes.map((rede: any, index) => (
                       <tr key={rede.id}>
                         <td className='hidden md:table-rede'>{index + 1}</td>
                         <td className='w-auto'>{rede.name}</td>                    
