@@ -39,6 +39,18 @@ export const GET = async() =>{
     select: {
       id: true,
       name: true,
+      _count: {
+        select: {
+          redes: true
+        }
+      },
+      redes: {
+        select: {
+          id: true,
+      name: true,
+
+        }
+      }
           }, 
           orderBy: {
             name: 'asc'
