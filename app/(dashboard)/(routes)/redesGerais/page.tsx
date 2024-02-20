@@ -33,7 +33,7 @@ interface RedePageProps {
 }
 
 const getRedes = async () =>{
-  const res = await fetch("/api/get", {
+  const res = await fetch("https://atos247.vercel.app/api/get", {
     cache: 'no-cache', next: { tags: ['redes']}
   })
   console.log(res)
