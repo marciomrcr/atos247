@@ -33,7 +33,7 @@ interface RedePageProps {
 }
 
 const getRedes = async () =>{
-  const res = await fetch("/api/redes/get", {
+  const res = await fetch("/api/get", {
     cache: 'no-cache', next: { tags: ['redes']}
   })
   console.log(res)
