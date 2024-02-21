@@ -34,7 +34,7 @@ const formSchema = z.object({
       return word[0].toLocaleUpperCase().concat(word.substring(1))
     }).join(' ')
   }),
-  redeId: z
+  redeGeralId: z
   .string()    
   .nonempty('O nome não pode ficar em branco!')
 });
@@ -100,9 +100,9 @@ setLoading(true);
       <div>
               <label className="text-gray-200 mt-2">Escolha uma rede Geral</label>
               <select
-                className={`mb-3 w-full input input-bordered ${errors.redeId ? "input-error" : ""
+                className={`mb-3 w-full input input-bordered ${errors.redeGeralId ? "input-error" : ""
                   }`}
-                {...register("redeId", { required: true })}
+                {...register("redeGeralId", { required: true })}
               >
                 {networksMothers.map((network) => (
                   <option key={network.id} value={network.id}>
@@ -110,8 +110,8 @@ setLoading(true);
                   </option>
                 ))}
               </select>
-              {errors.redeId && (
-                <p className="text-red-500">{errors.redeId.message}</p>
+              {errors.redeGeralId && (
+                <p className="text-red-500">{errors.redeGeralId.message}</p>
               )}
             </div>
       <div>

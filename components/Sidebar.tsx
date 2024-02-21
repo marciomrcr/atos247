@@ -38,7 +38,7 @@ const sidebarItems = [
   },
   {
     name: "Redes",
-    href: "/redesGerais",
+    href: "/redes",
     icon: MdOutlineConnectWithoutContact,
   },
 

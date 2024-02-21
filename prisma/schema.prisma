@@ -63,6 +63,20 @@ model Celula {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   redes     Rede     @relation(fields: [redeId], references: [id])
+  Membro    Membro[]
 
   @@map("celulas")
+}
+
+model Membro {
+  id     String  @id @default(auto()) @map("_id") @db.ObjectId
+  name   String  @unique
+  cellId String  @db.ObjectId
+  active Boolean @default(true)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  celula    Celula   @relation(fields: [cellId], references: [id])
+
+  @@map("membros")
 }

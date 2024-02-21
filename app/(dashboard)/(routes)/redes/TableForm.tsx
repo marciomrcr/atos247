@@ -1,82 +1,36 @@
-import type { Metadata } from "next";
+'use client'
+import { AlertCircleIcon } from 'lucide-react';
+import NetworkUpdate from './NetworkUpdate';
+import NetworkDelete from './NetworksDelete';
 
-import { AlertCircleIcon } from "lucide-react";
+type CountProps ={
 
-
-import { getRedesGerais } from "@/actions/getRedesGerais";
-import SearchForm from "@/components/shared/SearchForm";
-import { prisma } from "@/lib/prisma";
-import NetworkUpdate from "./NetworkUpdate";
-import NetworkDelete from "./NetworksDelete";
-import RedesForm from "./RedesForm";
-import TableForm from "./TableForm";
-
-
-
-export const metadata: Metadata = {
-  title: "Redes de Células",
-  description: "Redes de células"
-};
-
-async function getRedes() {
-  const res = await prisma.rede.findMany({
-
-    select: {
-
-      id: true,
-      name: true,
-      redeMae: {
-        select: {
-          id: true,
-          name: true
-        }
-      },
-      _count: {
-        select: {
-          celulas: true,
-        },
-      },
-
-      
-    },
-
-    orderBy: {
-      name: "asc",
-    },
-  });
-
-  return res;
+  celulas: number; 
 }
 
+interface IRedeProps{ 
+    id: string;
+    name: string, 
+    _count: CountProps,
+    redeMae: RedeMaeProps
+}
 
-async function RedesPage() {
-  const [redes, redeMae] = await Promise.all( [ getRedes(), getRedesGerais()])
+type RedeMaeProps ={
+  
+    id: string;
+        name: string;  
+
+         
+}
+
+const TableForm = ({redes}: {redes: IRedeProps[]} ) =>{
   return (
-    <div className="mt-3">
-     
-      <div className="flex items-center mb-4">
-      <h1 className=" mx-4 font-bold text-2xl">
-          Redes de Células Cadastradas
-        </h1>
-       <RedesForm networksMothers={redeMae} />
-        {/* <CellForm redes={redes}/> */}
-      </div>
-
-      <div className="bg-slate-400">
-       
-        <SearchForm />
-      </div>
-      {/* <TableForm redes={redesTest} countCelulas={countCelulas} redeGeral={redeGeral} /> */}
-      <h1>Teste com cache</h1>
-      <TableForm redes={redes} />
-    
+    <div className='mb-3'>
       <div>
-        {redes?.length === 0 ? (
+        {redes.length === 0 ? (
           <div className="flex items-center justify-center space-x-2 mt-6" ><AlertCircleIcon/> 
           <p className='text-red-600 text-xl text-center'>Nenhuma rede cadastrada. Cadastre a primeira rede 👨‍👩‍👧‍👦 </p></div>
         ) : (
-          <>
-          <h1>Teste sem cache</h1>
           <table className="table w-full bg-slate-100">
             <thead>
               <tr>
@@ -110,11 +64,10 @@ async function RedesPage() {
               })}
             </tbody>
           </table>
-          </>
         )}
       </div>
     </div>
-  );
+  )
 }
 
-export default RedesPage;
+export default TableForm

@@ -12,58 +12,21 @@ export const metadata: Metadata = {
   description: "Redes de células"
 };
 
-interface RedePageProps {
-  redes: {
-    id: string;
-    name: string;
-    redeMae: {
-      id: string,
-      name: string
-    }
-    _count:{
-      celulas: {
-        name: string
-      }
-    },
-    celulas: {
-      id: string,
-      name: string
-    }
-  }[]
-}
 
-const getRedes = async () =>{
-  const res = await fetch("https://atos247.vercel.app/api/get", {
-    cache: 'no-cache', next: { tags: ['redes']}
-  })
-  console.log(res)
-  return res.json()
-}
 
-// const getRede = async ()=> {
- 
-//   const redes = await prisma.rede.findMany({
-//     select: {
-//       id: true,
-//       name: true,
-//       redeMae: {
-//         select:{
-//           name: true
-//         }
-//       },
-//       _count: {
-//         select: {
-//           celulas: true
-//         }
-//       }
-//     }
+// const getRedes = async () =>{
+//   const res = await fetch("https://atos247.vercel.app/api/get", {
+//     cache: 'no-cache', next: { tags: ['redes']}
 //   })
-//   return redes
+//   console.log(res)
+//   return res.json()
 // }
+
+
 
 async function RedesGerais() {
   const networks = await getRedesGerais();
-  const Redes: RedePageProps = await getRedes()
+  
   
  
   return (
@@ -127,39 +90,7 @@ async function RedesGerais() {
           </table>
         )}
       </div>
-      <h1>Teste consultas Redes sem cache</h1>
-      <table className="table w-full">
-                 <thead>
-                   <tr>
-                     <th className='hidden md:table-cell'>#</th>
-                     <th>Rede</th>
-                     <th>Nº Célula</th>
-                     <th>Rede Geral</th>                      
-                     <th className="text-center">Ações</th>
-                   </tr>
-                 </thead>
-                 <tbody>
-                   {Redes.redes.map((rede: any, index) => (
-                      <tr key={rede.id}>
-                        <td className='hidden md:table-rede'>{index + 1}</td>
-                        <td className='w-auto'>{rede.name}</td>                    
-                        <td className='w-auto'>{rede._count.celulas.name}</td> 
-                        <td className='w-auto'>{rede.redeMae.name}</td> 
-                            {/* <td className='w-auto'>
-                    <Link href={"/cells/" + cell.id} className='cursor-pointer hover:text-blue-500 hover:font-semibold flex items-center justify-center gap-1'>
-                        {cell._count.discipulos}
-                     <View /> </Link></td> */}
-                     
-                        <td className='flex items-center justify-center mx-1 gap-2'>
-                           
-                        </td>
-        
-                      </tr>
-                    ))}
-        
-                  </tbody>
-                </table>
-    </div>
+          </div>
   );
 }
 
