@@ -58,6 +58,7 @@ export default function RedesForm({ networksMothers }: { networksMothers: Networ
   };
   const router = useRouter();
   const refresh = () => {
+    router.push('/redes')
     router.refresh();
   };
   const [loading, setLoading] = useState(false);

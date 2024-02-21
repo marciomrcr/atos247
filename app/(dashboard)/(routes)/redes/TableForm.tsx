@@ -1,4 +1,4 @@
-'use client'
+
 import { AlertCircleIcon } from 'lucide-react';
 import NetworkUpdate from './NetworkUpdate';
 import NetworkDelete from './NetworksDelete';

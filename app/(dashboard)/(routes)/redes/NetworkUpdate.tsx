@@ -14,10 +14,16 @@ export const metadata: Metadata = {
 
 const formSchema = z.object({
 
-  name: z.string().trim()
+  name: z
+  .string()    
   .nonempty('O nome não pode ficar em branco!')
-  .min(3, { message: 'O nome deverá ter pelo menos 3 letras!' })
-  .trim(),
+  .min(3, "O Nome deverá ter pelo menos 3 letras.")
+  .trim()
+  .transform(name =>{
+    return name.trim().split(' ').map(word =>{
+      return word[0].toLocaleUpperCase().concat(word.substring(1))
+    }).join(' ')
+  }),
   
 });
 
