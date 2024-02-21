@@ -1,10 +1,9 @@
-
+'use client'
 import { AlertCircleIcon } from 'lucide-react';
 import NetworkUpdate from './NetworkUpdate';
 import NetworkDelete from './NetworksDelete';
 
 type CountProps ={
-
   celulas: number; 
 }
 
@@ -15,12 +14,9 @@ interface IRedeProps{
     redeMae: RedeMaeProps
 }
 
-type RedeMaeProps ={
-  
+type RedeMaeProps ={  
     id: string;
         name: string;  
-
-         
 }
 
 const TableForm = ({redes}: {redes: IRedeProps[]} ) =>{
