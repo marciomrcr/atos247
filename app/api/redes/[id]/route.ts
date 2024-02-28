@@ -6,21 +6,28 @@ export const DELETE = async (
   request: Request,
   { params }: { params: { id: string } }
 ) => {
-  const getRede = await prisma.rede.findUnique({
-    where: {
-      id: params.id,
-    },
-  });
-  if (!getRede) {
-    return "Rede não encontrada";
+  try {
+    const getRede = await prisma.rede.findUnique({
+      where: {
+        id: params.id,
+      },
+    });
+    if (!getRede) {
+      return "Rede não encontrada";
+    }
+  
+    const rede = await prisma.rede.delete({
+      where: {
+        id: params.id,
+      },
+    });
+    return NextResponse.json(rede, { status: 200 });
+    
+  } catch (error) {
+    return NextResponse.json( {Message: "Erro de rede", error},{ status: 500 });
+    
   }
-
-  const rede = await prisma.rede.delete({
-    where: {
-      id: params.id,
-    },
-  });
-  return NextResponse.json(rede, { status: 200 });
+ 
 };
 
 export const PATCH = async (
@@ -28,6 +35,8 @@ export const PATCH = async (
   { params }: { params: { id: string } }
 ) => {
   const body: Rede = await request.json();
+
+try {
   const getRede = await prisma.rede.findUnique({
     where: {
       id: params.id,
@@ -47,26 +56,37 @@ export const PATCH = async (
     },
   });
   return NextResponse.json(rede, { status: 201 });
+
+  
+} catch (error) {
+  return NextResponse.json( {Message: "Erro de rede", error},{ status: 500 });
+  
+}
+
+  
 };
 
 export const GET = async (
   request: Request,
   { params }: { params: { id: string } }
 ) => {
-  const getRede = await prisma.rede.findUnique({
+try {
+  const rede = await prisma.rede.findUnique({
     where: {
       id: params.id,
     },
   });
-  if (!getRede) {
+  if (!rede) {
     return "Rede não encontrada";
   }
 
-  // const rede = await prisma.rede.findUnique({
-  //   where: {
-  //     id: params.id,
-  //   },
-  // });
+  
 
-  return NextResponse.json(getRede, { status: 200 });
+  return NextResponse.json(rede, { status: 200 });
+  
+} catch (error) {
+  return NextResponse.json( {Message: "Erro de rede", error},{ status: 500 });
+}
+
+ 
 };

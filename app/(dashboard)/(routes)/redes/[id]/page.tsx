@@ -1,11 +1,8 @@
-import { getCelulas } from "@/actions/getCelulas";
-
 import { prisma } from "@/lib/prisma";
 import { AlertCircleIcon, View } from "lucide-react";
 import { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { cache } from "react";
 
 
 interface NetworkPageProps {
@@ -14,39 +11,45 @@ interface NetworkPageProps {
   };
 }
 
-const getNetworks = cache(async () => {
-  const rede = await prisma.rede.findMany({
+// const getNetworks = cache(async () => {
+//   const rede = await prisma.rede.findMany({
     
-    select: {
-      id: true,
-      name: true,
-      _count:{
-        select: {
-          celulas: true
-        }
-      },
-      celulas: {
-        select: {
-          id: true,
-          name: true,
+//     select: {
+//       id: true,
+//       name: true,
+//       _count:{
+//         select: {
+//           celulas: true
+//         }
+//       },
+//       celulas: {
+//         select: {
+//           id: true,
+//           name: true,
          
-        }
-      },
+//         }
+//       },
       
-    },
-    orderBy: { name: "desc" },
-  }
-  );
-  if (!rede) notFound();
-  return rede;
-});
+//     },
+//     orderBy: { name: "desc" },
+//   }
+//   );
+//   if (!rede) notFound();
+//   return rede;
+// });
 
-const getNetworkId = cache(async (id: string) => {
+const getNetworkId = async (id: string) => {
   const network = await prisma.rede.findUnique({
     where: { id },
         select: {
           id: true,
-          name: true,          
+          name: true,  
+          redeMae:{
+            select: {
+              id: true, 
+              name: true
+            }
+          },        
           celulas:{
             select: {
               id: true,
@@ -66,7 +69,7 @@ const getNetworkId = cache(async (id: string) => {
   });
   if (!network) notFound();
   return network;
-});
+};
 
 export async function generateMetadata({
   params: { id },
@@ -81,9 +84,9 @@ export async function generateMetadata({
 export default async function NetworkPage({
   params: { id },
 }: NetworkPageProps) {
-  const redes = await getCelulas()
+  
   const network = await getNetworkId(id);
-  const networks = await getNetworks();
+ 
 
   return (
     <div >

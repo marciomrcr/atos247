@@ -1,8 +1,6 @@
-
 import { prisma } from "@/lib/prisma";
-import { AlertCircleIcon, View } from "lucide-react";
+import { AlertCircleIcon } from "lucide-react";
 import { Metadata } from "next";
-import Link from "next/link";
 import { notFound } from "next/navigation";
 import { cache } from "react";
 

@@ -1,5 +1,4 @@
 import { prisma } from "@/lib/prisma";
-import { revalidateTag } from "next/cache";
 
 import { NextResponse } from "next/server";
 
@@ -29,7 +28,7 @@ export const POST = async(request: Request) =>{
 
     }
   })
-  revalidateTag('redesGerais')
+  
   return NextResponse.json(rede,{status: 201})
 }
 

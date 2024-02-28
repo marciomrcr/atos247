@@ -36,5 +36,6 @@
     "Teste",
     "Treinamentos",
     "Vinicius"
-  ]
+  ],
+  "typescript.tsdk": "node_modules\\typescript\\lib"
 }
